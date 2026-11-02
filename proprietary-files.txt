@@ -1106,7 +1106,6 @@ vendor/lib/vendor.mediatek.hardware.mdmonitor-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.mdmonitor@1.0.so
 vendor/lib/vendor.mediatek.hardware.mmagent-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.mms-V1-ndk.so
-vendor/lib/vendor.mediatek.hardware.mtkpower-V2-ndk.so
 vendor/lib/vendor.mediatek.hardware.mtkpower-V3-ndk.so
 vendor/lib/vendor.mediatek.hardware.mtkpower_applist-V3-ndk.so
 vendor/lib/vendor.mediatek.hardware.netdagent-V1-ndk.so
@@ -1362,7 +1361,6 @@ vendor/lib64/libminiui.so
 vendor/lib64/libmipc.so
 vendor/lib64/libmmprofile.so
 vendor/lib64/libmnetlink_v104.so
-vendor/lib64/libmnl.so
 vendor/lib64/libmp4enc_sa.ca7.so
 vendor/lib64/libmsbc_mtk.so
 vendor/lib64/libmsnr.so
@@ -1601,7 +1599,6 @@ vendor/lib64/vendor.mediatek.hardware.mmlpq-V3-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mms-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mtklight-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mtkpower-V1-ndk.so
-vendor/lib64/vendor.mediatek.hardware.mtkpower-V2-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mtkpower-V3-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mtkpower_applist-V3-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mtkradioex.assist-V2-ndk.so
