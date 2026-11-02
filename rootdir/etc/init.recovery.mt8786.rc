@@ -1,4 +1,4 @@
-# LineageOS recovery setup for clove_row_wifi, derived from the stock Lenovo
+# LineageOS recovery setup for poplar, derived from the stock Lenovo
 # recovery's init.recovery.mt8786.rc.
 
 on init

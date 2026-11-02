@@ -1,7 +1,7 @@
-# LineageOS 23.2 for Lenovo Tab One (TB305FU / clove_row_wifi)
+# LineageOS 23.2 for Lenovo Tab One (TB305FU / poplar)
 
 Unofficial LineageOS 23.2 (Android 16) device tree for the Lenovo Tab One
-Wi-Fi (`TB305FU`, device `clove_row_wifi`), a MediaTek MT8786 (MT6768 family)
+Wi-Fi (`TB305FU`, device `poplar`), a MediaTek MT8786 (MT6768 family)
 tablet with a GKI 6.6 kernel.
 
 ## Status
@@ -26,13 +26,13 @@ Boots with SELinux enforcing; tested on one device.
 
 | Path | Repository |
 | --- | --- |
-| `device/lenovo/clove_row_wifi` | this repository |
-| `device/lenovo/clove_row_wifi-kernel` | [android_device_lenovo_clove_row_wifi-kernel](https://github.com/9cb14c1ec0/android_device_lenovo_clove_row_wifi-kernel) — prebuilt kernel, DTB/DTBO, modules |
-| `vendor/lenovo/clove_row_wifi` | [android_vendor_lenovo_clove_row_wifi](https://github.com/9cb14c1ec0/android_vendor_lenovo_clove_row_wifi) — proprietary blobs |
+| `device/lenovo/poplar` | this repository |
+| `device/lenovo/poplar-kernel` | [android_device_lenovo_poplar-kernel](https://github.com/9cb14c1ec0/android_device_lenovo_poplar-kernel) — prebuilt kernel, DTB/DTBO, modules |
+| `vendor/lenovo/poplar` | [android_vendor_lenovo_poplar](https://github.com/9cb14c1ec0/android_vendor_lenovo_poplar) — proprietary blobs |
 | `device/mediatek/sepolicy_vndr` | [LineageOS/android_device_mediatek_sepolicy_vndr](https://github.com/LineageOS/android_device_mediatek_sepolicy_vndr) |
 | `hardware/mediatek` | [LineageOS/android_hardware_mediatek](https://github.com/LineageOS/android_hardware_mediatek) |
 
-Kernel source: [android_kernel_lenovo_clove_row_wifi](https://github.com/9cb14c1ec0/android_kernel_lenovo_clove_row_wifi).
+Kernel source: [android_kernel_lenovo_poplar](https://github.com/9cb14c1ec0/android_kernel_lenovo_poplar).
 The kernel is unmodified AOSP GKI `android15-6.6` at `kernel/common`
 `076ac12bde16` (the commit of Lenovo's stock GKI build `ab13715361`); the
 MediaTek/Lenovo vendor modules are the stock ones. Lenovo has not published
@@ -40,15 +40,15 @@ the vendor module source.
 
 ## Building
 
-`.repo/local_manifests/clove_row_wifi.xml`:
+`.repo/local_manifests/poplar.xml`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
     <remote name="clove" fetch="https://github.com/9cb14c1ec0" />
-    <project name="android_device_lenovo_clove_row_wifi-lineage" path="device/lenovo/clove_row_wifi" remote="clove" revision="lineage-23.2" />
-    <project name="android_device_lenovo_clove_row_wifi-kernel" path="device/lenovo/clove_row_wifi-kernel" remote="clove" revision="lineage-23.2" />
-    <project name="android_vendor_lenovo_clove_row_wifi" path="vendor/lenovo/clove_row_wifi" remote="clove" revision="lineage-23.2" />
+    <project name="android_device_lenovo_poplar-lineage" path="device/lenovo/poplar" remote="clove" revision="lineage-23.2" />
+    <project name="android_device_lenovo_poplar-kernel" path="device/lenovo/poplar-kernel" remote="clove" revision="lineage-23.2" />
+    <project name="android_vendor_lenovo_poplar" path="vendor/lenovo/poplar" remote="clove" revision="lineage-23.2" />
 </manifest>
 ```
 
@@ -59,12 +59,12 @@ manifest as well.
 ```bash
 repo sync
 source build/envsetup.sh
-lunch lineage_clove_row_wifi-bp4a-userdebug
+lunch lineage_poplar-bp4a-userdebug
 m bacon
 ```
 
 The result is a full A/B OTA package,
-`out/target/product/clove_row_wifi/lineage-23.2-*-UNOFFICIAL-clove_row_wifi.zip`.
+`out/target/product/poplar/lineage-23.2-*-UNOFFICIAL-poplar.zip`.
 It does not contain firmware (preloader, LK, TEE, modem, ...).
 
 ## Installing
@@ -80,12 +80,12 @@ device was converted step by step during bring-up.
    slot's partitions (`*_a` and `*_b`) with `fastboot`.
 2. **Patched LK.** The stock LK refuses any `vbmeta` not signed by Lenovo,
    even when unlocked. Flash the dm-verity-patched LK from the
-   [TWRP port](https://github.com/9cb14c1ec0/android_device_lenovo_clove_row_wifi)
+   [TWRP port](https://github.com/9cb14c1ec0/android_device_lenovo_poplar)
    releases to **both** `lk_a` and `lk_b` (it is built from the same stock
    firmware version).
 3. **Boot images**, from the build output, to the current slot:
    ```bash
-   fastboot getvar product          # must be clove_row_wifi
+   fastboot getvar product          # must be poplar
    fastboot flash vbmeta vbmeta.img
    fastboot flash vbmeta_system vbmeta_system.img
    fastboot flash vbmeta_vendor vbmeta_vendor.img
@@ -107,7 +107,7 @@ on the host only finishes after that.
 
 | Path | Contents |
 | --- | --- |
-| `BoardConfig.mk`, `device.mk`, `lineage_clove_row_wifi.mk` | board, product |
+| `BoardConfig.mk`, `device.mk`, `lineage_poplar.mk` | board, product |
 | `rootdir/etc/` | vendor init scripts, fstabs, ueventd, module loading |
 | `sepolicy/vendor/` | device policy on top of `sepolicy_vndr`; `stock_port.te` and the contexts files are generated from the stock Lenovo vendor policy |
 | `configs/` | VINTF, permissions |

@@ -1,5 +1,5 @@
 #
-# system.prop for clove_row_wifi
+# system.prop for poplar
 #
 # NOTE: do NOT set ro.secure / ro.adb.secure here. The build variant already
 # assigns them and gen_build_prop hard-fails on duplicate sysprop assignments:

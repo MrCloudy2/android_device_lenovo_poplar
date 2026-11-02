@@ -5,6 +5,6 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(TARGET_DEVICE),clove_row_wifi)
+ifeq ($(TARGET_DEVICE),poplar)
 include $(call all-subdir-makefiles,$(LOCAL_PATH))
 endif

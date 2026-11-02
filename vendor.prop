@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Vendor properties for clove_row_wifi, from the stock Lenovo vendor build.prop
+# Vendor properties for poplar, from the stock Lenovo vendor build.prop
 # (ro.vendor.build.id=AP3A.240905.015.A2), minus build-generated values.
 
 ro.vendor.config.lgsi.market_name=Lenovo Tab One

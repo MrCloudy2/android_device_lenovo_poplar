@@ -1,4 +1,4 @@
-# Proprietary files for Lenovo Tab One (TB305FU / clove_row_wifi).
+# Proprietary files for Lenovo Tab One (TB311XU / poplar).
 #
 # All blobs are from the stock Lenovo Android 15 firmware:
 #   ro.vendor.build.id=AP3A.240905.015.A2

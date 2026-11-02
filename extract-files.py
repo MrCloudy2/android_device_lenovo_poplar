@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
-# Extracts proprietary blobs for clove_row_wifi into vendor/lenovo/clove_row_wifi.
+# Extracts proprietary blobs for poplar into vendor/lenovo/poplar.
 #
 # Source: a directory holding the extracted stock partitions, e.g.
 #   <dump>/vendor/...
@@ -114,7 +114,7 @@ blob_fixups: blob_fixups_user_type = {
 }  # fmt: skip
 
 module = ExtractUtilsModule(
-    'clove_row_wifi',
+    'poplar',
     'lenovo',
     blob_fixups=blob_fixups,
     lib_fixups=lib_fixups,

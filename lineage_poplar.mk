@@ -18,21 +18,21 @@ PRODUCT_PACKAGES += \
     snapuserd \
     snapuserd.recovery
 
-# Inherit from clove_row_wifi device
-$(call inherit-product, device/lenovo/clove_row_wifi/device.mk)
+# Inherit from poplar device
+$(call inherit-product, device/lenovo/poplar/device.mk)
 
 # Inherit some common Lineage stuff — Wi-Fi-only tablet
 $(call inherit-product, vendor/lineage/config/common_full_tablet_wifionly.mk)
 
-PRODUCT_DEVICE := clove_row_wifi
-PRODUCT_NAME := lineage_clove_row_wifi
+PRODUCT_DEVICE := poplar
+PRODUCT_NAME := lineage_poplar
 PRODUCT_BRAND := Lenovo
-PRODUCT_MODEL := TB305FU
+PRODUCT_MODEL := TB311XU
 PRODUCT_MANUFACTURER := LENOVO
 
 PRODUCT_GMS_CLIENTID_BASE := android-lenovo
 
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
-# Stock build fingerprint (Android 15 / AP3A.240905.015.A2).
-BUILD_FINGERPRINT := Lenovo/TB305FU/TB305FU:15/AP3A.240905.015.A2/__ROW:user/release-keys
+# Stock build fingerprint (ZUI 17, Android 16 / BP2A.250605.031.A3).
+BUILD_FINGERPRINT := Lenovo/TB311XU_EEA/TB311XU:16/BP2A.250605.031.A3/37.350.260708W:user/release-keys

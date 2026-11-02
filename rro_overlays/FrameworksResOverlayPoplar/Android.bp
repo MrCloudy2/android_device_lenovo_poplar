@@ -4,6 +4,6 @@
 //
 
 runtime_resource_overlay {
-    name: "WifiResOverlayClove",
+    name: "FrameworksResOverlayPoplar",
     vendor: true,
 }

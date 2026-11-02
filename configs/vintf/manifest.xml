@@ -1,5 +1,5 @@
 <!--
-    Device VINTF manifest for clove_row_wifi: the stock Lenovo base manifest
+    Device VINTF manifest for poplar: the stock Lenovo base manifest
     (HALs without their own fragment). target-level is 6 (FCM 6), as on stock;
     the vendor blobs are frozen at that level.
 -->

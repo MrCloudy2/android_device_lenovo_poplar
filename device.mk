@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-LOCAL_PATH := device/lenovo/clove_row_wifi
+LOCAL_PATH := device/lenovo/poplar
 
 # -- A/B / update_engine -------------------------------------------------
 # Only the partitions we actually build are listed for postinstall.
@@ -70,8 +70,8 @@ PRODUCT_COPY_FILES += \
 
 # -- Overlays ------------------------------------------------------------
 PRODUCT_PACKAGES += \
-    FrameworksResOverlayClove \
-    WifiResOverlayClove
+    FrameworksResOverlayPoplar \
+    WifiResOverlayPoplar
 
 # -- Soong namespace -----------------------------------------------------
 PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
@@ -223,4 +223,4 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/mediatek
 
 # -- Proprietary files -------------------------------------------------------
-$(call inherit-product, vendor/lenovo/clove_row_wifi/clove_row_wifi-vendor.mk)
+$(call inherit-product, vendor/lenovo/poplar/poplar-vendor.mk)

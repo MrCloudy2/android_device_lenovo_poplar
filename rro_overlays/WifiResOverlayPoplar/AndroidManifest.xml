@@ -4,8 +4,9 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.overlay.clove">
-    <overlay android:targetPackage="android"
+    package="com.android.wifi.resources.overlay.poplar">
+    <application android:hasCode="false" />
+    <overlay android:targetPackage="com.android.wifi.resources"
         android:isStatic="true"
         android:priority="0" />
 </manifest>
