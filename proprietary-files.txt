@@ -910,7 +910,7 @@ vendor/lib/libapu_mdw.so
 vendor/lib/libarm_egl_properties_sysprop.so
 vendor/lib/libarm_gralloc_properties_sysprop.so
 vendor/lib/libarm_mali_config_sysprops.so
-vendor/lib/libarmnn.so
+vendor/lib/libarmnn.so;MODULE_SUFFIX=_vendor
 vendor/lib/libarmnn_ndk.mtk.vndk.so
 vendor/lib/libasn1c_core.so
 vendor/lib/libasn1c_mapi.so
@@ -966,7 +966,7 @@ vendor/lib/libdlbpreg.so
 vendor/lib/libdmshal.so
 vendor/lib/libfgauge_gm30.so
 vendor/lib/libfile_op.so
-vendor/lib/libformatter.so
+vendor/lib/libformatter.so;MODULE_SUFFIX=_vendor
 vendor/lib/libged.so
 vendor/lib/libgpu_aux.so
 vendor/lib/libgpud.so
@@ -1207,7 +1207,7 @@ vendor/lib64/libapu_mdw.so
 vendor/lib64/libarm_egl_properties_sysprop.so
 vendor/lib64/libarm_gralloc_properties_sysprop.so
 vendor/lib64/libarm_mali_config_sysprops.so
-vendor/lib64/libarmnn.so
+vendor/lib64/libarmnn.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libarmnn_ndk.mtk.vndk.so
 vendor/lib64/libasn1c_core.so
 vendor/lib64/libasn1c_mapi.so
@@ -1318,7 +1318,7 @@ vendor/lib64/libfft_vendor.so
 vendor/lib64/libfgauge_gm30.so
 vendor/lib64/libfile_op.so
 vendor/lib64/libforkexecwrap.so
-vendor/lib64/libformatter.so
+vendor/lib64/libformatter.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libged.so
 vendor/lib64/libgpu_aux.so
 vendor/lib64/libgpud.so
