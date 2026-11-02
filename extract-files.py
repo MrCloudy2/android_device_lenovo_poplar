@@ -43,7 +43,6 @@ lib_fixups: lib_fixups_user_type = {
     (
         'libarmnn',
         'libformatter',
-        'vendor.mediatek.hardware.bluetooth.audio-V1-ndk',
         'libion_mtk',
         'libmtkperf_client_vendor',
         'libperfctl_vendor',
@@ -122,6 +121,23 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/lib64/libsilkybrightnesscore.so',
     ): blob_fixup()
         .replace_needed('libtinyxml2.so', 'libtinyxml2-v34.so'),
+    # The stock MTK bluetooth.audio AIDL lib ships as *_vendor.so (see
+    # proprietary-files.txt); the source one owns the original file name.
+    (
+        'vendor/lib/android.hardware.bluetooth.audio-impl-mediatek.so',
+        'vendor/lib/hw/vendor.mediatek.hardware.bluetooth.audio@2.1-impl.so',
+        'vendor/lib/hw/vendor.mediatek.hardware.bluetooth.audio@2.2-impl.so',
+        'vendor/lib/libbluetooth_audio_session_aidl_mtk.so',
+        'vendor/lib64/android.hardware.bluetooth.audio-impl-mediatek.so',
+        'vendor/lib64/hw/vendor.mediatek.hardware.bluetooth.audio@2.1-impl.so',
+        'vendor/lib64/hw/vendor.mediatek.hardware.bluetooth.audio@2.2-impl.so',
+        'vendor/lib64/libbluetooth_audio_session_aidl_mtk.so',
+    ): blob_fixup()
+        .replace_needed('vendor.mediatek.hardware.bluetooth.audio-V1-ndk.so', 'vendor.mediatek.hardware.bluetooth.audio-V1-ndk_vendor.so'),
+    # The stock thermal HAL is installed as *-stock (hardware/mediatek's
+    # source HAL owns the original path).
+    'vendor/etc/init/thermal-mediatek.rc': blob_fixup()
+        .regex_replace(r'/vendor/bin/hw/android\.hardware\.thermal-service\.mediatek(?=\s)', '/vendor/bin/hw/android.hardware.thermal-service.mediatek-stock'),
 }  # fmt: skip
 
 module = ExtractUtilsModule(

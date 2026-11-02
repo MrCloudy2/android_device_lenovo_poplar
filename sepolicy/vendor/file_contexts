@@ -1,2 +1,5 @@
 # Block devices (this eMMC host is 11230000.mmc)
 /dev/block/platform/11230000\.mmc/by-name/misc    u:object_r:misc_block_device:s0
+
+# Stock MTK thermal HAL, installed under another name (see extract-files.py)
+/(vendor|system/vendor)/bin/hw/android\.hardware\.thermal-service\.mediatek-stock   u:object_r:hal_thermal_default_exec:s0

@@ -55,7 +55,7 @@ vendor/bin/hw/android.hardware.media.c2@1.2-mediatek
 vendor/bin/hw/android.hardware.media.c2@1.2-mediatek-64b
 vendor/bin/hw/android.hardware.neuralnetworks-shim-service-mtk-legacy
 vendor/bin/hw/android.hardware.secure_element@1.2-service-mediatek
-vendor/bin/hw/android.hardware.thermal-service.mediatek;MODULE_SUFFIX=_vendor
+vendor/bin/hw/android.hardware.thermal-service.mediatek:vendor/bin/hw/android.hardware.thermal-service.mediatek-stock
 vendor/bin/hw/android.hardware.usb-aidl-service.mediatekv1.0
 vendor/bin/hw/android.hardware.usb.gadget-aidl-service.mediatekv1.0
 vendor/bin/hw/camerahalserver
@@ -1027,7 +1027,6 @@ vendor/lib/libpqhdrmetaparser.so
 vendor/lib/libpqsharememory.so
 vendor/lib/libpqtuning.so
 vendor/lib/libpqxmlparser.so
-vendor/lib/libprotobuf-cpp-full-21.12.so
 vendor/lib/libreference-ril.so
 vendor/lib/librgbwlightsensor.so
 vendor/lib/libril.so
@@ -1093,7 +1092,7 @@ vendor/lib/vendor.mediatek.framework.mtksf_ext-V2-ndk.so
 vendor/lib/vendor.mediatek.hardware.apmonitor-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.apmonitor@2.0.so
 vendor/lib/vendor.mediatek.hardware.audio@6.1.so
-vendor/lib/vendor.mediatek.hardware.bluetooth.audio-V1-ndk.so;MODULE_SUFFIX=_vendor
+vendor/lib/vendor.mediatek.hardware.bluetooth.audio-V1-ndk.so:vendor/lib/vendor.mediatek.hardware.bluetooth.audio-V1-ndk_vendor.so;FIX_SONAME
 vendor/lib/vendor.mediatek.hardware.composer_ext-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.composer_ext@1.0.so
 vendor/lib/vendor.mediatek.hardware.gpuserv-V2-ndk.so
@@ -1471,7 +1470,6 @@ vendor/lib64/libpqhdrmetaparser.so
 vendor/lib64/libpqsharememory.so
 vendor/lib64/libpqtuning.so
 vendor/lib64/libpqxmlparser.so
-vendor/lib64/libprotobuf-cpp-full-21.12.so
 vendor/lib64/libratconfig.so
 vendor/lib64/librcs_volte_core.so
 vendor/lib64/libreference-ril.so
@@ -1564,7 +1562,7 @@ vendor/lib64/vendor.mediatek.hardware.apmonitor-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.apmonitor@2.0.so
 vendor/lib64/vendor.mediatek.hardware.atci-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.audio@6.1.so
-vendor/lib64/vendor.mediatek.hardware.bluetooth.audio-V1-ndk.so;MODULE_SUFFIX=_vendor
+vendor/lib64/vendor.mediatek.hardware.bluetooth.audio-V1-ndk.so:vendor/lib64/vendor.mediatek.hardware.bluetooth.audio-V1-ndk_vendor.so;FIX_SONAME
 vendor/lib64/vendor.mediatek.hardware.camera.atms-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.camera.bgservice-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.camera.frhandler@1.0.so
