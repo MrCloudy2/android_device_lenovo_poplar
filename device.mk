@@ -232,5 +232,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_SOONG_NAMESPACES += \
     hardware/mediatek
 
+# -- IMS (VoLTE / VoWiFi) ------------------------------------------------------
+# AOSP telephony talks to the stock mtkfusionrild over the AIDL radio V3 HALs.
+# The stock MtkTeleService / mediatek-framework need MTK's own framework, so
+# IMS comes from a rebuilt standalone MTK ImsService (vendor/mediatek/ims).
+$(call inherit-product, vendor/mediatek/ims/ims.mk)
+
 # -- Proprietary files -------------------------------------------------------
 $(call inherit-product, vendor/lenovo/poplar/poplar-vendor.mk)
