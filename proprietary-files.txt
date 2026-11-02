@@ -905,7 +905,6 @@ vendor/lib/libaal_cust.so
 vendor/lib/libaal_key.so
 vendor/lib/libaal_sec.so
 vendor/lib/libaalservice.so
-vendor/lib/libaconfig_storage_read_api_cc.so
 vendor/lib/libapmonitor_vendor.so
 vendor/lib/libapu_mdw.so
 vendor/lib/libarm_egl_properties_sysprop.so
@@ -1096,8 +1095,6 @@ vendor/lib/vendor.mediatek.framework.mtksf_ext-V2-ndk.so
 vendor/lib/vendor.mediatek.hardware.apmonitor-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.apmonitor@2.0.so
 vendor/lib/vendor.mediatek.hardware.audio@6.1.so
-vendor/lib/vendor.mediatek.hardware.bluetooth.audio@2.1.so
-vendor/lib/vendor.mediatek.hardware.bluetooth.audio@2.2.so
 vendor/lib/vendor.mediatek.hardware.composer_ext-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.composer_ext@1.0.so
 vendor/lib/vendor.mediatek.hardware.gpuserv-V2-ndk.so
@@ -1108,7 +1105,6 @@ vendor/lib/vendor.mediatek.hardware.mms-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.mtkpower-V3-ndk.so
 vendor/lib/vendor.mediatek.hardware.mtkpower_applist-V3-ndk.so
 vendor/lib/vendor.mediatek.hardware.netdagent-V1-ndk.so
-vendor/lib/vendor.mediatek.hardware.netdagent@1.0.so
 vendor/lib/vendor.mediatek.hardware.nvram-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.pq@2.0.so
 vendor/lib/vendor.mediatek.hardware.pq_aidl-V2-ndk.so
@@ -1204,7 +1200,6 @@ vendor/lib64/libaal_sec.so
 vendor/lib64/libaalservice.so
 vendor/lib64/libabfadp.so
 vendor/lib64/libacdk.so
-vendor/lib64/libaconfig_storage_read_api_cc.so
 vendor/lib64/libaimemc.so
 vendor/lib64/libapmonitor_vendor.so
 vendor/lib64/libapu_mdw.so
@@ -1569,8 +1564,6 @@ vendor/lib64/vendor.mediatek.hardware.apmonitor-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.apmonitor@2.0.so
 vendor/lib64/vendor.mediatek.hardware.atci-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.audio@6.1.so
-vendor/lib64/vendor.mediatek.hardware.bluetooth.audio@2.1.so
-vendor/lib64/vendor.mediatek.hardware.bluetooth.audio@2.2.so
 vendor/lib64/vendor.mediatek.hardware.camera.atms-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.camera.bgservice-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.camera.frhandler@1.0.so
@@ -1585,7 +1578,6 @@ vendor/lib64/vendor.mediatek.hardware.dmc-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.gnss-V3-ndk.so
 vendor/lib64/vendor.mediatek.hardware.gpuserv-V2-ndk.so
 vendor/lib64/vendor.mediatek.hardware.lbs-V1-ndk.so
-vendor/lib64/vendor.mediatek.hardware.lbs@1.0.so
 vendor/lib64/vendor.mediatek.hardware.log-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mbrain-V6-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mdmonitor-V1-ndk.so
@@ -1617,7 +1609,6 @@ vendor/lib64/vendor.mediatek.hardware.mtkradioex.sim-V2-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mtkradioex.smartratswitch-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.mtkradioex.voice-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.netdagent-V1-ndk.so
-vendor/lib64/vendor.mediatek.hardware.netdagent@1.0.so
 vendor/lib64/vendor.mediatek.hardware.nvram-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.power@1.1.so
 vendor/lib64/vendor.mediatek.hardware.power@2.0.so
