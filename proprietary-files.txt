@@ -1095,6 +1095,7 @@ vendor/lib/vendor.mediatek.framework.mtksf_ext-V2-ndk.so
 vendor/lib/vendor.mediatek.hardware.apmonitor-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.apmonitor@2.0.so
 vendor/lib/vendor.mediatek.hardware.audio@6.1.so
+vendor/lib/vendor.mediatek.hardware.bluetooth.audio-V1-ndk.so;MODULE_SUFFIX=_vendor
 vendor/lib/vendor.mediatek.hardware.composer_ext-V1-ndk.so
 vendor/lib/vendor.mediatek.hardware.composer_ext@1.0.so
 vendor/lib/vendor.mediatek.hardware.gpuserv-V2-ndk.so
@@ -1565,6 +1566,7 @@ vendor/lib64/vendor.mediatek.hardware.apmonitor-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.apmonitor@2.0.so
 vendor/lib64/vendor.mediatek.hardware.atci-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.audio@6.1.so
+vendor/lib64/vendor.mediatek.hardware.bluetooth.audio-V1-ndk.so;MODULE_SUFFIX=_vendor
 vendor/lib64/vendor.mediatek.hardware.camera.atms-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.camera.bgservice-V1-ndk.so
 vendor/lib64/vendor.mediatek.hardware.camera.frhandler@1.0.so

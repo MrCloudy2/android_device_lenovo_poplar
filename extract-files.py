@@ -43,6 +43,7 @@ lib_fixups: lib_fixups_user_type = {
     (
         'libarmnn',
         'libformatter',
+        'vendor.mediatek.hardware.bluetooth.audio-V1-ndk',
     ): lib_fixup_vendor_suffix,
 }
 
