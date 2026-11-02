@@ -1,9 +1,0 @@
-vendor.lenovo.hardware.battery::IBattery u:object_r:hal_lenovobattery_hwservice:s0
-vendor.lenovo.hardware.factory::IFactory u:object_r:hal_lenovofactory_hwservice:s0
-vendor.lenovo.hardware.performance::IPerformance  u:object_r:hal_lenovoperformance_hwservice:s0
-vendor.lenovo.hardware.touchscreen::ITouchscreen              u:object_r:hal_lenovotouchscreen_hwservice:s0
-vendor.lenovo.hardware.usb::IUsb              u:object_r:hal_lenovousb_hwservice:s0
-vendor.lenovo.hardware.hyperschedule::IHyperschedule  u:object_r:hal_lenovohyperschedule_hwservice:s0
-vendor.mediatek.hardware.hdcpwifidisplay::IHDCPWIFIDisplay u:object_r:mtk_hal_hdcpwifidisplay_hwservice:s0
-motorola.hardware.input::IMotInput                          u:object_r:hal_motinput_hwservice:s0
-vendor.microtrust.hardware.afw::IAFWDevice u:object_r:mtk_hal_afw_hwservice:s0

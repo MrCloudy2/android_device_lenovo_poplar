@@ -190,6 +190,9 @@ BUILD_BROKEN_PREBUILT_ELF_FILES := true
 # SELinux
 include device/mediatek/sepolicy_vndr/SEPolicy.mk
 BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+# Generated from the stock vendor policy by sepolicy/gen_stock_port.py
+# (everything sepolicy_vndr does not already provide).
+BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor/stock
 
 # Security patch level: stock vendor (ro.vendor.build.security_patch) and the
 # stock GKI boot image (com.android.build.boot.security_patch in its AVB footer)

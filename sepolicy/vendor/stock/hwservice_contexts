@@ -1,0 +1,9 @@
+# Stock TB311XU entries not provided by sepolicy_vndr (generated)
+vendor.mediatek.hardware.hdcpwifidisplay::IHDCPWIFIDisplay u:object_r:mtk_hal_hdcpwifidisplay_hwservice:s0
+vendor.microtrust.hardware.afw::IAFWDevice u:object_r:mtk_hal_afw_hwservice:s0
+vendor.lenovo.hardware.battery::IBattery u:object_r:vendor_lenovo_battery_hwservice:s0
+vendor.lenovo.hardware.usb::IUsb u:object_r:vendor_lenovo_usb_hwservice:s0
+vendor.lenovo.hardware.touchscreen::ITouchscreen u:object_r:vendor_lenovo_touchscreen_hwservice:s0
+vendor.lenovo.hardware.factory::IFactory u:object_r:vendor_lenovo_factory_hwservice:s0
+vendor.lenovo.hardware.performance::IPerformance u:object_r:vendor_lenovo_performance_hwservice:s0
+vendor.dolby.hardware.dms::IDms          u:object_r:hal_dms_hwservice:s0
