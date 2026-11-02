@@ -6,10 +6,9 @@
 PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/lineage_poplar.mk
 
-# LineageOS 22.2 uses the Android 14+ three-part lunch format:
-#   <product>-<release config>-<variant>
-# The release config is `bp1a` (LineageOS's own).
+# Three-part lunch format: <product>-<release config>-<variant>.
+# LineageOS 24.0 (Android 17) uses the `cp2a` release config.
 COMMON_LUNCH_CHOICES := \
-    lineage_poplar-bp1a-user \
-    lineage_poplar-bp1a-userdebug \
-    lineage_poplar-bp1a-eng
+    lineage_poplar-cp2a-user \
+    lineage_poplar-cp2a-userdebug \
+    lineage_poplar-cp2a-eng

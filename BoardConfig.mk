@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
-# LineageOS 23.2 (Android 16) board config for the Lenovo Tab
+# LineageOS 24.0 (Android 17) board config for the Lenovo Tab
 # (TB311XU / poplar). MediaTek MT6768/MT8786 family, GKI 6.6 kernel.
 #
 
@@ -33,6 +33,9 @@ BOARD_SHIPPING_API_LEVEL := 30
 TARGET_BOARD_PLATFORM := mt6768
 TARGET_BOOTLOADER_BOARD_NAME := poplar
 TARGET_NO_BOOTLOADER := true
+
+# OTA
+TARGET_OTA_ASSERT_DEVICE := TB311XU,poplar
 
 # Kernel: prebuilt, from device/lenovo/poplar-kernel (see its README).
 # Image.gz and system_dlkm modules are an unmodified AOSP GKI android15-6.6
@@ -188,9 +191,10 @@ BUILD_BROKEN_PREBUILT_ELF_FILES := true
 include device/mediatek/sepolicy_vndr/SEPolicy.mk
 BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 
-# Security patch level (stock ZUI 17 / Android 15)
-VENDOR_SECURITY_PATCH := 2026-05-05
-BOOT_SECURITY_PATCH := 2026-05-05
+# Security patch level: stock vendor (ro.vendor.build.security_patch) and the
+# stock GKI boot image (com.android.build.boot.security_patch in its AVB footer)
+VENDOR_SECURITY_PATCH := 2025-09-05
+BOOT_SECURITY_PATCH := 2024-09-05
 
 # Properties
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
@@ -203,8 +207,9 @@ DEVICE_MATRIX_FILE := $(DEVICE_PATH)/configs/vintf/compatibility_matrix.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/configs/vintf/framework_compatibility_matrix.xml
 
 # Verified Boot
-# The stock LK rejects any vbmeta not signed by Lenovo, even when unlocked;
-# LineageOS needs the patched LK described in README.md.
+# Unlike TB305FU (clove), the unlocked TB311XU LK accepts a vbmeta signed with
+# any key (tested 2026-11-02 with a self-signed RSA2048 vbmeta, flags 3: boots
+# in orange state). No patched LK is needed.
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 BOARD_AVB_ALGORITHM := SHA256_RSA4096

@@ -1,7 +1,8 @@
 <!--
-    Device VINTF manifest for poplar: the stock Lenovo base manifest
-    (HALs without their own fragment). target-level is 6 (FCM 6), as on stock;
-    the vendor blobs are frozen at that level.
+    Device VINTF manifest for poplar: the stock TB311XU base manifest
+    (/vendor/etc/vintf/manifest.xml, firmware 37.350.260708W), unchanged.
+    HALs with their own fragment live in /vendor/etc/vintf/manifest/.
+    target-level is 6 (FCM 6), as on stock; the vendor blobs are frozen at it.
 -->
 <!--
     Input:
@@ -9,9 +10,12 @@
         device/mediatek/vendor/common/project_manifest/manifest_cameraprovider.xml
         device/mediatek/vendor/common/project_manifest/manifest_postproc.xml
         device/mediatek/vendor/common/project_manifest/manifest_audio.xml
-        device/mediatek/vendor/common/project_manifest/manifest_em.xml
+        device/mediatek/vendor/common/project_manifest/manifest_ss.xml
+        device/mediatek/vendor/common/project_manifest/manifest_radioconfig.xml
+        device/mediatek/vendor/common/project_manifest/manifest_secure_element_ss.xml
         device/mediatek/vendor/common/project_manifest/manifest_km41.xml
         device/mediatek/vendor/common/project_manifest/manifest_log.xml
+        device/mediatek/vendor/common/project_manifest/manifest_mdmonitor.xml
         device/mediatek/vendor/common/project_manifest/manifest_aee.xml
         device/mediatek/vendor/common/project_manifest/manifest_boot.xml
         device/mediatek/vendor/common/project_manifest/manifest_pq.xml
@@ -33,6 +37,60 @@
         <name>android.hardware.keymaster</name>
         <transport>hwbinder</transport>
         <fqname>@4.1::IKeymasterDevice/default</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.config</name>
+        <version>3</version>
+        <fqname>IRadioConfig/default</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.data</name>
+        <version>3</version>
+        <fqname>IRadioData/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.ims</name>
+        <version>2</version>
+        <fqname>IRadioIms/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.messaging</name>
+        <version>3</version>
+        <fqname>IRadioMessaging/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.modem</name>
+        <version>3</version>
+        <fqname>IRadioModem/imsSlot1</fqname>
+        <fqname>IRadioModem/se1</fqname>
+        <fqname>IRadioModem/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.network</name>
+        <version>3</version>
+        <fqname>IRadioNetwork/imsSlot1</fqname>
+        <fqname>IRadioNetwork/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.sap</name>
+        <fqname>ISap/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.sim</name>
+        <version>3</version>
+        <fqname>IRadioSim/imsSlot1</fqname>
+        <fqname>IRadioSim/se1</fqname>
+        <fqname>IRadioSim/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.voice</name>
+        <version>3</version>
+        <fqname>IRadioVoice/imsSlot1</fqname>
+        <fqname>IRadioVoice/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.secure_element</name>
+        <fqname>ISecureElement/SIM1</fqname>
     </hal>
     <hal format="aidl">
         <name>android.hardware.soundtrigger3</name>
@@ -88,12 +146,58 @@
         <fqname>ILog/ModemLogHidlServer</fqname>
     </hal>
     <hal format="aidl">
+        <name>vendor.mediatek.hardware.mdmonitor</name>
+        <fqname>IMDMonitorService/default</fqname>
+    </hal>
+    <hal format="aidl">
         <name>vendor.mediatek.hardware.mmagent</name>
         <fqname>IMMAgent/default</fqname>
     </hal>
     <hal format="aidl">
         <name>vendor.mediatek.hardware.mms</name>
         <fqname>IMms/default</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.data</name>
+        <version>3</version>
+        <fqname>IMtkRadioExData/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.dch</name>
+        <version>2</version>
+        <fqname>IMtkRadioExDc/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.ims</name>
+        <version>2</version>
+        <fqname>IMtkRadioExIms/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.messaging</name>
+        <fqname>IMtkRadioExMessaging/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.modem</name>
+        <version>3</version>
+        <fqname>IMtkRadioExModem/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.network</name>
+        <fqname>IMtkRadioExNetwork/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.rcs</name>
+        <version>2</version>
+        <fqname>IMtkRadioExRcs/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.sim</name>
+        <version>2</version>
+        <fqname>IMtkRadioExSim/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.mediatek.hardware.mtkradioex.voice</name>
+        <fqname>IMtkRadioExVoice/slot1</fqname>
     </hal>
     <hal format="aidl">
         <name>vendor.mediatek.hardware.nvram</name>
@@ -104,5 +208,8 @@
         <version>7</version>
         <fqname>IPictureQuality_AIDL/default</fqname>
     </hal>
+    <sepolicy>
+        <version>202404</version>
+    </sepolicy>
     <kernel target-level="6"/>
 </manifest>

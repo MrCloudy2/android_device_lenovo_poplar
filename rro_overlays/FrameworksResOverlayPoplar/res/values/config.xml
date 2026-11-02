@@ -4,11 +4,11 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources>
-    <!-- Wi-Fi only tablet -->
-    <bool name="config_mobile_data_capable">false</bool>
-    <bool name="config_sms_capable">false</bool>
-    <bool name="config_voice_capable">false</bool>
-    <string name="config_defaultSms" translatable="false"></string>
+    <!-- LTE tablet: voice, SMS and mobile data, as on stock (framework-res
+         defaults, no Lenovo overlay overrides them). -->
+    <bool name="config_mobile_data_capable">true</bool>
+    <bool name="config_sms_capable">true</bool>
+    <bool name="config_voice_capable">true</bool>
 
     <bool name="config_showNavigationBar">true</bool>
     <bool name="config_supportsCamToggle">true</bool>
