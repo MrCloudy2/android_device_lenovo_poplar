@@ -41,7 +41,6 @@ vendor/bin/factory
 vendor/bin/fuelgauged
 vendor/bin/fuelgauged_nvram
 vendor/bin/gsm0710muxd
-vendor/bin/hostapd_cli
 vendor/bin/hw/android.hardware.audio.service-aidl.mediatek
 vendor/bin/hw/android.hardware.bluetooth-service-mediatek
 vendor/bin/hw/android.hardware.gatekeeper-service.beanpod
@@ -56,7 +55,7 @@ vendor/bin/hw/android.hardware.media.c2@1.2-mediatek
 vendor/bin/hw/android.hardware.media.c2@1.2-mediatek-64b
 vendor/bin/hw/android.hardware.neuralnetworks-shim-service-mtk-legacy
 vendor/bin/hw/android.hardware.secure_element@1.2-service-mediatek
-vendor/bin/hw/android.hardware.thermal-service.mediatek
+vendor/bin/hw/android.hardware.thermal-service.mediatek;MODULE_SUFFIX=_vendor
 vendor/bin/hw/android.hardware.usb-aidl-service.mediatekv1.0
 vendor/bin/hw/android.hardware.usb.gadget-aidl-service.mediatekv1.0
 vendor/bin/hw/camerahalserver
@@ -83,7 +82,6 @@ vendor/bin/hw/vendor.microtrust.hardware.thh@2.0-service
 vendor/bin/init.pstore_blk.sh
 vendor/bin/init_thh
 vendor/bin/ipsec_mon
-vendor/bin/iw
 vendor/bin/iwlist
 vendor/bin/iwpriv
 vendor/bin/jpegtool
@@ -984,7 +982,7 @@ vendor/lib/libhevce_sb.ca7.android.so
 vendor/lib/libhwm.so
 vendor/lib/libicd_decoder.so
 vendor/lib/libimgsensorca.so
-vendor/lib/libion_mtk.so
+vendor/lib/libion_mtk.so;MODULE_SUFFIX=_vendor
 vendor/lib/libion_ulit.so
 vendor/lib/libipsec_ims_shr.so
 vendor/lib/libispcameraca.so
@@ -1001,7 +999,7 @@ vendor/lib/libmtkgpuservsdk_vendor.so
 vendor/lib/libmtkhardware_legacy.so
 vendor/lib/libmtklimiter_vendor.so
 vendor/lib/libmtknetutils.so
-vendor/lib/libmtkperf_client_vendor.so
+vendor/lib/libmtkperf_client_vendor.so;MODULE_SUFFIX=_vendor
 vendor/lib/libmtkproperty.so
 vendor/lib/libmtkrillog.so
 vendor/lib/libmtkshifter_vendor.so
@@ -1017,12 +1015,12 @@ vendor/lib/libnvram_sec.so
 vendor/lib/libnxp_extamp_intf.so
 vendor/lib/liboem_specific.so
 vendor/lib/liboemcrypto.so
-vendor/lib/libperfctl_vendor.so
+vendor/lib/libperfctl_vendor.so;MODULE_SUFFIX=_vendor
 vendor/lib/libpixelflinger.so
 vendor/lib/libpkm.so
 vendor/lib/libpower_timer.so
 vendor/lib/libpowerhal.so
-vendor/lib/libpowerhalwrap_vendor.so
+vendor/lib/libpowerhalwrap_vendor.so;MODULE_SUFFIX=_vendor
 vendor/lib/libpq_cust_base.so
 vendor/lib/libpqframework.so
 vendor/lib/libpqhdrmetaparser.so
@@ -1344,7 +1342,7 @@ vendor/lib64/libimageio_plat_drv.so
 vendor/lib64/libimageio_plat_pipe.so
 vendor/lib64/libimgsensorca.so
 vendor/lib64/libimsg_log.so
-vendor/lib64/libion_mtk.so
+vendor/lib64/libion_mtk.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libion_ulit.so
 vendor/lib64/libipsec_ims_shr.so
 vendor/lib64/libispcameraca.so
@@ -1440,7 +1438,7 @@ vendor/lib64/libmtklimiter_vendor.so
 vendor/lib64/libmtkmipc-ril.so
 vendor/lib64/libmtknetcap.so
 vendor/lib64/libmtknetutils.so
-vendor/lib64/libmtkperf_client_vendor.so
+vendor/lib64/libmtkperf_client_vendor.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libmtkproperty.so
 vendor/lib64/libmtkrillog.so
 vendor/lib64/libmtkrilutils.so
@@ -1461,12 +1459,12 @@ vendor/lib64/libnvram_sec.so
 vendor/lib64/libnxp_extamp_intf.so
 vendor/lib64/liboem_specific.so
 vendor/lib64/liboemcrypto.so
-vendor/lib64/libperfctl_vendor.so
+vendor/lib64/libperfctl_vendor.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libpixelflinger.so
 vendor/lib64/libpkm.so
 vendor/lib64/libpower_timer.so
 vendor/lib64/libpowerhal.so
-vendor/lib64/libpowerhalwrap_vendor.so
+vendor/lib64/libpowerhalwrap_vendor.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libpq_cust_base.so
 vendor/lib64/libpqframework.so
 vendor/lib64/libpqhdrmetaparser.so

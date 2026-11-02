@@ -38,12 +38,16 @@ def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):
 
 lib_fixups: lib_fixups_user_type = {
     **lib_fixups,
-    # MTK libs whose plain name is an unrelated module in the tree
+    # MTK libs whose plain name is taken by another module in the tree
     # (proprietary-files.txt gives them MODULE_SUFFIX=_vendor).
     (
         'libarmnn',
         'libformatter',
         'vendor.mediatek.hardware.bluetooth.audio-V1-ndk',
+        'libion_mtk',
+        'libmtkperf_client_vendor',
+        'libperfctl_vendor',
+        'libpowerhalwrap_vendor',
     ): lib_fixup_vendor_suffix,
 }
 
