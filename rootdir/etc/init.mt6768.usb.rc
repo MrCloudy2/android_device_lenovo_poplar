@@ -4,7 +4,7 @@ on early-init
     write /sys/module/musb_hdrc/parameters/kernel_init_done 1
     # force on usb
     # write /sys/class/udc/musb-hdrc/device/cmode 3
-    write /sys/module/block/parameters/events_dfl_poll_msecs 1000
+      write /sys/module/block/parameters/events_dfl_poll_msecs 1000
 
 on init
     setprop sys.usb.controller "musb-hdrc"
@@ -20,7 +20,6 @@ on post-fs
     mkdir /config/usb_gadget/g1/strings/0x409 0770
     write /config/usb_gadget/g1/strings/0x409/serialnumber ${ro.serialno}
     write /config/usb_gadget/g1/strings/0x409/manufacturer ${ro.product.manufacturer}
-    write /config/usb_gadget/g1/strings/0x409/product ${ro.product.model}
     mkdir /config/usb_gadget/g1/functions/accessory.gs2
     mkdir /config/usb_gadget/g1/functions/audio_source.gs3
     mkdir /config/usb_gadget/g1/functions/ffs.adb
@@ -83,12 +82,16 @@ on boot
     chmod 0660 /dev/ttyGS2
     chown system radio /dev/ttyGS3
     chmod 0660 /dev/ttyGS3
+    chown system system /sys/devices/platform/mt_usb/musb-hdrc/usb1/1-1/power/wakeup
+    chmod 0660 /sys/devices/platform/mt_usb/musb-hdrc/usb1/1-1/power/wakeup
+    chown root root /sys/class/udc/musb-hdrc/device/cmode
+    chmod 0777 /sys/class/udc/musb-hdrc/device/cmode
 
 on charger
     mkdir /dev/usb-ffs 0775 shell shell
     mkdir /dev/usb-ffs/adb 0770 shell shell
     mkdir /config/usb_gadget/g1 0770 shell shell
-    write /config/usb_gadget/g1/idVendor 0x0E8D
+    write /config/usb_gadget/g1/idVendor 0x17EF
     write /config/usb_gadget/g1/bcdDevice 0x0223
     write /config/usb_gadget/g1/bcdUSB 0x0200
     write /config/usb_gadget/g1/os_desc/use 1
@@ -107,6 +110,10 @@ on charger
     mount functionfs adb /dev/usb-ffs/adb rmode=0770,fmode=0660,uid=2000,gid=2000,no_disconnect=1
     setprop sys.usb.configfs 1
     setprop vendor.usb.controller "musb-hdrc"
+
+# The usb device name is compatible with the PRC and ROW versions
+on property:ro.odm.lenovo.series=*
+    write /config/usb_gadget/g1/strings/0x409/product ${ro.odm.lenovo.series}
 
 # midi for kpoc
 on property:ro.bootmode=charger && property:ro.debuggable=0
@@ -146,14 +153,14 @@ on property:sys.usb.config=none && property:sys.usb.configfs=1
 ### start adbd at init.usb.configfs.rc ###
 on property:sys.usb.config=adb && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F00
+    setprop vendor.usb.pid 0x7EF1
 on property:sys.usb.config=adb && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2006
+    setprop vendor.usb.pid 0x7EF1
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=adb && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2029
+    setprop vendor.usb.pid 0x7EF1
 
 on property:sys.usb.ffs.ready=1 && property:sys.usb.config=adb && \
 property:vendor.usb.acm_enable=1 && property:sys.usb.configfs=1
@@ -178,14 +185,14 @@ property:vendor.usb.acm_enable=0 && property:sys.usb.configfs=1
 ### main function : mtp ###
 on property:sys.usb.config=mtp && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F03
+    setprop vendor.usb.pid 0x7EF4
 on property:sys.usb.config=mtp && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2012
+    setprop vendor.usb.pid 0x7EF4
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=mtp && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x202A
+    setprop vendor.usb.pid 0x7EF4
 
 on property:sys.usb.config=mtp && property:vendor.usb.acm_enable=1 && \
 property:sys.usb.configfs=1 && property:vendor.usb.ffs.mtp.ready=1
@@ -211,14 +218,14 @@ property:sys.usb.configfs=1 && property:vendor.usb.ffs.mtp.ready=1
 ### start adbd at init.usb.configfs.rc ###
 on property:sys.usb.config=mtp,adb && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F04
+    setprop vendor.usb.pid 0x7EF5
 on property:sys.usb.config=mtp,adb && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x200A
+    setprop vendor.usb.pid 0x7EF5
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=mtp,adb && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2026
+    setprop vendor.usb.pid 0x7EF5
 
 on property:sys.usb.ffs.ready=1 && property:sys.usb.config=mtp,adb && \
 property:vendor.usb.acm_enable=1 && property:sys.usb.configfs=1 && \
@@ -245,27 +252,17 @@ property:vendor.usb.ffs.mtp.ready=1
     write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
     setprop sys.usb.state ${sys.usb.config}
 
-### main function : mtp,mass_storage ###
-on property:sys.usb.config=mtp,mass_storage && property:vendor.usb.acm_enable=0 && \
-property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F05
-
-### main function : mtp,mass_storage,adb ###
-on property:sys.usb.config=mtp,mass_storage,adb && property:vendor.usb.acm_enable=0 && \
-property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F06
-
 ### main function : ptp ###
 on property:sys.usb.config=ptp && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F07
+    setprop vendor.usb.pid 0x7EF8
 on property:sys.usb.config=ptp && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2013
+    setprop vendor.usb.pid 0x7EF8
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=ptp && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x202B
+    setprop vendor.usb.pid 0x7EF8
 
 on property:sys.usb.config=ptp && property:vendor.usb.acm_enable=1 && \
 property:sys.usb.configfs=1 && property:vendor.usb.ffs.ptp.ready=1
@@ -289,14 +286,14 @@ property:sys.usb.configfs=1 && property:vendor.usb.ffs.ptp.ready=1
 ### start adbd at init.usb.configfs.rc ###
 on property:sys.usb.config=ptp,adb && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F08
+    setprop vendor.usb.pid 0x7EF9
 on property:sys.usb.config=ptp,adb && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x200D
+    setprop vendor.usb.pid 0x7EF9
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=ptp,adb && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2027
+    setprop vendor.usb.pid 0x7EF9
 
 on property:sys.usb.ffs.ready=1 && property:sys.usb.config=ptp,adb && \
 property:vendor.usb.acm_enable=1 && property:sys.usb.configfs=1 && \
@@ -321,6 +318,40 @@ property:vendor.usb.ffs.ptp.ready=1
     write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
     setprop sys.usb.state ${sys.usb.config}
 
+### main function : rndis ###
+on property:sys.usb.config=rndis && property:vendor.usb.acm_cnt=0 && \
+property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x7EFA
+on property:sys.usb.config=rndis && property:vendor.usb.acm_cnt=1 && \
+property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x7EFA
+    setprop vendor.usb.acm_port1 ""
+on property:sys.usb.config=rndis && property:vendor.usb.acm_cnt=2 && \
+property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x7EFA
+
+on property:sys.usb.config=rndis && property:vendor.usb.acm_enable=1 && \
+property:sys.usb.configfs=1
+    mkdir /config/usb_gadget/g1/functions/mtk_rndis.gs4
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "ums_acm"
+    write /config/usb_gadget/g1/idProduct ${vendor.usb.pid}
+    write /sys/devices/platform/mt_usb/saving 1
+    symlink /config/usb_gadget/g1/functions/mtk_rndis.gs4 /config/usb_gadget/g1/configs/b.1/f1
+    symlink /config/usb_gadget/g1/functions/acm.gs${vendor.usb.acm_port0} /config/usb_gadget/g1/configs/b.1/f2
+    symlink /config/usb_gadget/g1/functions/acm.gs${vendor.usb.acm_port1} /config/usb_gadget/g1/configs/b.1/f3
+    write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=rndis && property:vendor.usb.acm_enable=0 && \
+property:sys.usb.configfs=1
+    mkdir /config/usb_gadget/g1/functions/mtk_rndis.gs4
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "rndis"
+    write /config/usb_gadget/g1/idProduct ${vendor.usb.pid}
+    symlink /config/usb_gadget/g1/functions/mtk_rndis.gs4 /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
+
+### BEGIN Lenovo, zhilx1, 2024/01/16, LGSIU-12947, add Readyfor rndis for usb connect
 on property:sys.usb.config=readyfor && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
     setprop vendor.usb.pid 0x2E46
@@ -343,6 +374,17 @@ property:sys.usb.configfs=1
     symlink /config/usb_gadget/g1/functions/acm.gs${vendor.usb.acm_port1} /config/usb_gadget/g1/configs/b.1/f3
     write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
     setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mtp,mass_storage && property:vendor.usb.acm_enable=0 && \
+property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x7EF6
+on property:sys.usb.config=mtp,mass_storage && property:vendor.usb.acm_enable=1 && \
+property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x7EF6
+    setprop vendor.usb.acm_port1 ""
+on property:sys.usb.config=mtp,mass_storage && property:vendor.usb.acm_enable=2 && \
+property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x7EF6
 
 on property:sys.usb.config=readyfor && property:vendor.usb.acm_enable=0 && \
 property:sys.usb.configfs=1
@@ -386,50 +428,18 @@ property:vendor.usb.acm_enable=0 && property:sys.usb.configfs=1
     symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f2
     write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
     setprop sys.usb.state ${sys.usb.config}
-
-### main function : rndis ###
-on property:sys.usb.config=rndis && property:vendor.usb.acm_cnt=0 && \
-property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F09
-on property:sys.usb.config=rndis && property:vendor.usb.acm_cnt=1 && \
-property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2011
-    setprop vendor.usb.acm_port1 ""
-on property:sys.usb.config=rndis && property:vendor.usb.acm_cnt=2 && \
-property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x202C
-
-on property:sys.usb.config=rndis && property:vendor.usb.acm_enable=1 && \
-property:sys.usb.configfs=1
-    mkdir /config/usb_gadget/g1/functions/mtk_rndis.gs4
-    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "ums_acm"
-    write /config/usb_gadget/g1/idProduct ${vendor.usb.pid}
-    write /sys/devices/platform/mt_usb/saving 1
-    symlink /config/usb_gadget/g1/functions/mtk_rndis.gs4 /config/usb_gadget/g1/configs/b.1/f1
-    symlink /config/usb_gadget/g1/functions/acm.gs${vendor.usb.acm_port0} /config/usb_gadget/g1/configs/b.1/f2
-    symlink /config/usb_gadget/g1/functions/acm.gs${vendor.usb.acm_port1} /config/usb_gadget/g1/configs/b.1/f3
-    write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
-    setprop sys.usb.state ${sys.usb.config}
-
-on property:sys.usb.config=rndis && property:vendor.usb.acm_enable=0 && \
-property:sys.usb.configfs=1
-    mkdir /config/usb_gadget/g1/functions/mtk_rndis.gs4
-    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "rndis"
-    write /config/usb_gadget/g1/idProduct ${vendor.usb.pid}
-    symlink /config/usb_gadget/g1/functions/mtk_rndis.gs4 /config/usb_gadget/g1/configs/b.1/f1
-    write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
-    setprop sys.usb.state ${sys.usb.config}
+### END LGSIU-12947
 
 on property:sys.usb.config=rndis,adb && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F0A
+    setprop vendor.usb.pid 0x7EFB
 on property:sys.usb.config=rndis,adb && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2010
+    setprop vendor.usb.pid 0x7EFB
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=rndis,adb && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2028
+    setprop vendor.usb.pid 0x7EFB
 
 on property:sys.usb.ffs.ready=1 && property:sys.usb.config=rndis,adb && \
 property:vendor.usb.acm_enable=1 && property:sys.usb.configfs=1
@@ -453,6 +463,18 @@ property:vendor.usb.acm_enable=0 && property:sys.usb.configfs=1
     symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f2
     write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
     setprop sys.usb.state ${sys.usb.config}
+
+### main function : mtp,mass_storage,adb ###
+on property:sys.usb.config=mtp,mass_storage,adb && property:vendor.usb.acm_enable=0 && \
+property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x7EF7
+on property:sys.usb.config=mtp,mass_storage,adb && property:vendor.usb.acm_enable=1 && \
+property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x7EF7
+    setprop vendor.usb.acm_port1 ""
+on property:sys.usb.config=mtp,mass_storage,adb && property:vendor.usb.acm_enable=2 && \
+property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x7EF7
 
 ### main function : ncm ###
 on property:sys.usb.config=ncm && property:vendor.usb.acm_cnt=0 && \
@@ -526,10 +548,10 @@ property:vendor.usb.acm_enable=0 && property:sys.usb.configfs=1
 
 ### main function : midi ###
 on property:sys.usb.config=midi && property:sys.usb.configfs=1
-    write /config/usb_gadget/g1/idProduct 0x7F0D
+    write /config/usb_gadget/g1/idProduct 0x7EFE
 
 on property:sys.usb.config=midi,adb && property:sys.usb.configfs=1
-    write /config/usb_gadget/g1/idProduct 0x7F0E
+    write /config/usb_gadget/g1/idProduct 0x7EFF
 
 ### main function : accessory ###
 on property:sys.usb.config=accessory && property:sys.usb.configfs=1
@@ -650,14 +672,14 @@ property:vendor.usb.acm_enable=0 && property:sys.usb.configfs=1
 ### main function : mass_storage ###
 on property:sys.usb.config=mass_storage && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F01
+    setprop vendor.usb.pid 0x7EF2
 on property:sys.usb.config=mass_storage && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x200F
+    setprop vendor.usb.pid 0x7EF2
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=mass_storage && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x202D
+    setprop vendor.usb.pid 0x7EF2
 
 on property:sys.usb.config=mass_storage && property:vendor.usb.acm_enable=1 && \
 property:sys.usb.configfs=1
@@ -680,14 +702,14 @@ property:sys.usb.configfs=1
 
 on property:sys.usb.config=mass_storage,adb && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F02
+    setprop vendor.usb.pid 0x7EF3
 on property:sys.usb.config=mass_storage,adb && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2006
+    setprop vendor.usb.pid 0x7EF3
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=mass_storage,adb && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2029
+    setprop vendor.usb.pid 0x7EF3
 
 on property:sys.usb.config=mass_storage,adb && property:sys.usb.configfs=1
     start adbd
@@ -716,14 +738,14 @@ property:vendor.usb.acm_enable=0 && property:sys.usb.configfs=1
 ### main function : bicr ###
 on property:sys.usb.config=bicr && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F0B
+    setprop vendor.usb.pid 0x7EFC
 on property:sys.usb.config=bicr && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x200F
+    setprop vendor.usb.pid 0x7EFC
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=bicr && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x202D
+    setprop vendor.usb.pid 0x7EFC
 
 on property:sys.usb.config=bicr && property:vendor.usb.acm_enable=1 && \
 property:sys.usb.configfs=1
@@ -750,14 +772,14 @@ property:sys.usb.configfs=1
 
 on property:sys.usb.config=bicr,adb && property:vendor.usb.acm_cnt=0 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x7F0C
+    setprop vendor.usb.pid 0x7EFD
 on property:sys.usb.config=bicr,adb && property:vendor.usb.acm_cnt=1 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2006
+    setprop vendor.usb.pid 0x7EFD
     setprop vendor.usb.acm_port1 ""
 on property:sys.usb.config=bicr,adb && property:vendor.usb.acm_cnt=2 && \
 property:sys.usb.configfs=1
-    setprop vendor.usb.pid 0x2029
+    setprop vendor.usb.pid 0x7EFD
 
 on property:sys.usb.config=bicr,adb && property:sys.usb.configfs=1
     start adbd
@@ -1079,4 +1101,19 @@ on property:vendor.usb.testmode=3
 	write /proc/mtk_usb/testmode "test K"
 on property:vendor.usb.testmode=4
 	write /proc/mtk_usb/testmode "test packet"
+on property:ro.boot.usbdebugflag=1
+    setprop persist.sys.lgsi.adbdebug "true"
+    setprop persist.vendor.lgsi.adbdebug "true"
+    setprop sys.usb.config adb
 ### PLATFORM VARIANT, cat $rc_file | grep write | sort | grep -vE "android0|usb20_phy" | awk '{print $2}' | uniq ###
+
+# BEGIN Lenovo, zhilx1, 2024/05/28, Add accessory mode for SmartConnect
+on property:sys.usb.config=none && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/os_desc/use 1
+    write /config/usb_gadget/g1/os_desc/qw_sign "MSFT100"
+
+on property:sys.usb.config=accessory && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/os_desc/use 1
+    write /config/usb_gadget/g1/os_desc/qw_sign "INVALID"
+# END zhilx1
+

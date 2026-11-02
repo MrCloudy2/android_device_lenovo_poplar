@@ -51,6 +51,8 @@ on init
     write /dev/cpuset/background/cpus 0-3
     write /dev/cpuset/system-background/cpus 0-5
     write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/sf/cpus 0-7
+    write /dev/cpuset/display/cpus 6-7
 
 on late-init
     write /proc/bootprof "INIT:late-init"
@@ -60,29 +62,24 @@ on late-init
 # mount different fs start
 
 on charger
-    exec /system/bin/e2fsck -f -p /dev/block/by-name/cache
-    # mount ext4 /dev/block/platform/bootdevice/by-name/cache /cache rw wait
+    #exec /system/bin/e2fsck -f -p /dev/block/platform/bootdevice/by-name/cache
+    #mount ext4 /dev/block/platform/bootdevice/by-name/cache /cache rw wait
     chmod 0660 /dev/spm
     chown system system /dev/spm
     start spm_script
     chmod 0666 /dev/kmsg
     chmod 0775 /mnt/vendor
-    mkdir /mnt/vendor/nvcfg
-#  Clove code for Clove-1783 by dongfj3 at 2024.10.29 start
-    mount ext4 /dev/block/by-name/nvcfg /mnt/vendor/nvcfg rw wait
-#  Clove code for Clove-1783 by dongfj3 at 2024.10.29 end
-    chown system system /mnt/vendor/nvcfg
-    chmod 0771 /mnt/vendor/nvcfg
-    restorecon_recursive /mnt/vendor/nvcfg
-    write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
-    write /sys/bus/platform/devices/battery/FG_daemon_log_level 7
-#  Clove code for CloveV-2631 by liugong2 at 2025.04.17 start
-    mkdir /mnt/vendor/persist 0664 system system
+    #mkdir /mnt/vendor/nvcfg
+    #mount ext4 /dev/block/platform/bootdevice/by-name/nvcfg /mnt/vendor/nvcfg rw wait
+    #chown system system /mnt/vendor/nvcfg
+    #chmod 0771 /mnt/vendor/nvcfg
+    #restorecon_recursive /mnt/vendor/nvcfg
+    mkdir /mnt/vendor/persist
     mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw wait
     chown system system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
-    restorecon_recursive /mnt/vendor/persist
-#  Clove code for CloveV-2631 by liugong2 at 2025.04.17 end
+    write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
+    write /sys/bus/platform/devices/battery/FG_daemon_log_level 7
     # Permissions for System Server and daemons.
     chown system system /sys/power/autosleep
     chown system system /sys/power/state
@@ -96,15 +93,14 @@ on charger
     write /sys/power/pm_async 0
     write /sys/power/pm_freeze_timeout 2000
 
-    start fuelgauged
-    start fuelgauged_nvram
+    #start fuelgauged
+    #start fuelgauged_nvram
 
     chown system system /sys/class/leds/lcd-backlight/brightness
     chown system system /sys/class/leds/red/brightness
     chown system system /sys/class/leds/green/brightness
 
     start vendor.light-default
-    start vendor.health-default
 
     # Stop bootprof
     write /proc/bootprof "0"
@@ -122,7 +118,7 @@ on fs
     # mount fstab
     write /proc/bootprof "INIT:Mount_START"
     write /sys/kernel/tracing/trace_marker "B|1|Mount"
-    # mount_all /vendor/etc/fstab.mt6768 --early
+    mount_all /vendor/etc/fstab.mt6768 --early
     write /sys/kernel/tracing/trace_marker "E"
     write /proc/bootprof "INIT:Mount_END"
 
@@ -177,14 +173,15 @@ on post-fs
 
     # allow ccci_mdinit access ccci_dump
     chown root system /proc/ccci_dump
+    write /mnt/vendor/persist/flag/battery_chargine_level 0
 
 on late-fs
     write /proc/bootprof "INIT:late-fs"
     setprop init.userspace_reboot.userdata_remount.timeoutmillis 10000
     write /proc/bootprof "INIT:Mount_START --late"
-    # write /sys/kernel/tracing/trace_marker "B|1|Mount late"
-    # mount_all /vendor/etc/fstab.mt6768 --late
-    # exec /system/bin/tune2fs -O has_journal -u 10010 -r 4096 /dev/block/platform/bootdevice/by-name/userdata
+    write /sys/kernel/tracing/trace_marker "B|1|Mount late"
+    mount_all /vendor/etc/fstab.mt6768 --late
+    exec /system/bin/tune2fs -O has_journal -u 10010 -r 4096 /dev/block/by-name/userdata
     write /sys/kernel/tracing/trace_marker "E"
     write /proc/bootprof "INIT:Mount_END --late"
 
@@ -245,6 +242,23 @@ on post-fs-data
     chown root system /data/vendor/camera_dump
     chmod 0771 /data/vendor/camera_dump
 
+    #create exif 3a dump dat file
+    #1) app5.dat
+    write /data/vendor/camera_dump/app5.dat 0
+    chown root system /data/vendor/camera_dump/app5.dat
+    chmod 0666 /data/vendor/camera_dump/app5.dat
+    #2) app6.dat
+    write /data/vendor/camera_dump/app6.dat 0
+    chown root system /data/vendor/camera_dump/app6.dat
+    chmod 0666 /data/vendor/camera_dump/app6.dat
+    #3) app7.dat
+    write /data/vendor/camera_dump/app7.dat 0
+    chown root system /data/vendor/camera_dump/app7.dat
+    chmod 0666 /data/vendor/camera_dump/app7.dat
+    #4) app8.dat
+    write /data/vendor/camera_dump/app8.dat 0
+    chown root system /data/vendor/camera_dump/app8.dat
+    chmod 0666 /data/vendor/camera_dump/app8.dat
     #Create Camera Dip Debug Folder
     mkdir /data/vendor/dipdebug
     chown root system /data/vendor/dipdebug
@@ -267,9 +281,9 @@ on post-fs-data
     chmod 0660 /dev/spm
     chown system system /dev/spm
 
-    # /dev/block/bootdevice/by-name/lenovocust
+# /dev/block/bootdevice/by-name/lenovocust
     wait /dev/block/by-name/lenovocust
-    #mount ext4 /dev/block/by-name/lenovocust /lenovocust noatime nosuid nodev barrier=1
+#mount ext4 /dev/block/by-name/lenovocust /lenovocust noatime nosuid nodev barrier=1
     restorecon_recursive   /lenovocust
     chown system system /lenovocust
     chmod 0777 /lenovocust
@@ -353,6 +367,16 @@ on post-fs-data
     chown audioserver audio /sys/bus/platform/devices/rt5509_param.0/prop_param
     chown audioserver audio /sys/bus/platform/devices/rt5509_param.1/prop_param
     chown audioserver audio /sys/bus/platform/devices/mt6660-param.0/prop_params
+    chmod 0777 /sys/bus/i2c/drivers/aw883xx_smartpa/3-0034/cali_re
+    chmod 0777 /sys/bus/i2c/drivers/aw883xx_smartpa/3-0034/cali_f0
+    mkdir /mnt/vendor/persist/factory
+    mkdir /mnt/vendor/persist/factory/audio
+    chown system system /mnt/vendor/persist/factory
+    chown system system /mnt/vendor/persist/factory/audio
+    chown system system /mnt/vendor/persist/factory/audio/aw_cali.bin
+    chmod 0777 /mnt/vendor/persist/factory
+    chmod 0777 /mnt/vendor/persist/factory/audio
+    chmod 0777 /mnt/vendor/persist/factory/audio/aw_cali.bin
 
     #AAudio Boost
     write /dev/stune/rt/schedtune.boost 30
@@ -362,6 +386,7 @@ on post-fs-data
 
     #Fingerprint
     chmod 0666 /dev/goodix_fp
+    chmod 0666 /dev/silead_fp
 
     #VideoCodec
     mkdir /data/vendor/vcodec 0777 media system
@@ -607,16 +632,6 @@ on post-fs-data
     # power manager
     write /sys/power/pm_async 0
 
-    # Clove code for Clove-967 by zhangxd38 at 20240921 start
-    chown root system /sys/devices/platform/11004000.i2c/i2c-7/7-003b/power_supply/charger/battery_thermal_control_limit
-    chmod 0666 /sys/devices/platform/11004000.i2c/i2c-7/7-003b/power_supply/charger/battery_thermal_control_limit
-    chown root system /sys/devices/platform/11004000.i2c/i2c-7/7-006a/power_supply/charger/battery_thermal_control_limit
-    chmod 0666 /sys/devices/platform/11004000.i2c/i2c-7/7-006a/power_supply/charger/battery_thermal_control_limit
-    chown root system /sys/class/power_supply/charger/battery_thermal_control_limit
-    chmod 0666 /sys/class/power_supply/charger/battery_thermal_control_limit
-    # Clove code for Clove-967 by zhangxd38 at 20240921 end
-
-
     #RTC
     chmod 660 /dev/alarm
     chown root system /dev/alarm
@@ -633,10 +648,6 @@ on early-boot
 
 on boot
     write /proc/bootprof "INIT:boot"
-
-    #Clove code for CLOVE-693 by qiangys1 at 20240913 start
-    write /proc/sys/vm/min_free_kbytes 8192
-    #Clove code for CLOVE-693 by qiangys1 at 20240913 end
 
     write /proc/sys/vm/dirty_writeback_centisecs 300
     chmod 0660 /sys/power/autosleep
@@ -692,11 +703,13 @@ on boot
     chmod 0770 /sys/power/tuxonice
     chmod 0220 /sys/power/tuxonice/do_hibernate
 
-    # Peridot code for PERIDOT-324 by chengsx1 @20240314 start
+# CSDK code, Change otgenable's own&mod
     chmod 0777 /sys/devices/platform/mt_usb/otgenable
     chown system system /sys/devices/platform/mt_usb/otgenable
-    # Peridot code for PERIDOT-423 by chengsx1 @20240314 end
 
+# CSDK code, Change otgenable's own&mod
+    chmod 0777 /sys/devices/platform/mt_usb/otgenable
+    chown system system /sys/devices/platform/mt_usb/otgenable
 
 # Smartbook Handler Framework
     chown system system /sys/power/sb_state
@@ -802,36 +815,6 @@ on boot
     chown system system /sys/power/dcm_state
     chmod 0660 /sys/power/dcm_state
 
-# charger
-    chown root system /sys/class/power_supply/charger/real_type
-    chmod 0660 /sys/class/power_supply/charger/real_type
-    chown root system /sys/class/power_supply/charger/input_suspend
-    chmod 0660 /sys/class/power_supply/charger/input_suspend
-    chown root system /sys/class/power_supply/charger/bm_enable
-    chmod 0660 /sys/class/power_supply/charger/bm_enable
-    chown root system /sys/class/power_supply/charger/bp_enable
-    chmod 0660 /sys/class/power_supply/charger/bp_enable
-    chown root system /sys/class/power_supply/battery/activate_date
-    chmod 0664 /sys/class/power_supply/battery/activate_date
-    chown root system /sys/class/power_supply/battery/product_date
-    chmod 0660 /sys/class/power_supply/battery/product_date
-    chown root system /sys/class/power_supply/battery/cycle_count
-    chmod 0664 /sys/class/power_supply/battery/cycle_count
-    chown root system /sys/class/power_supply/battery/soh
-    chmod 0664 /sys/class/power_supply/battery/soh
-    chown root system /sys/class/power_supply/battery/battery_maintenance
-    chmod 0664 /sys/class/power_supply/battery/battery_maintenance
-    chown root system /sys/class/power_supply/battery/battery_maintenance_v2
-    chmod 0664 /sys/class/power_supply/battery/battery_maintenance_v2
-# shipmode
-    chown root system /sys/class/power_supply/charger/shipmode
-    chmod 0666 /sys/class/power_supply/charger/shipmode
-
-# Clove code for CLOVE-874 by wangbiao @20240915 start
-    chmod 0777 /sys/devices/platform/mt_usb/otgenable
-    chown system system /sys/devices/platform/mt_usb/otgenable
-# Clove code forCLOVE-874 by wangbiao @20240915 end
-
 ##Netlog tool
    #change permissions about terminal
     chown root radio /proc/net/vlan/config
@@ -867,6 +850,36 @@ on boot
     chown system radio /dev/ttyGS1
 #Power Manager
     write /sys/power/pm_freeze_timeout 2000
+
+#charge
+	chmod 0775 sys/devices/platform/11004000.i2c/i2c-7/7-006a/charge_enable
+	chown root root sys/devices/platform/11004000.i2c/i2c-7/7-006a/charge_enable
+	chmod 0775 sys/devices/platform/11004000.i2c/i2c-7/7-006a/ship_mode
+	chown root root sys/devices/platform/11004000.i2c/i2c-7/7-006a/ship_mode
+	chmod 0775 sys/devices/platform/11004000.i2c/i2c-7/7-006a/hiz
+	chown root root sys/devices/platform/11004000.i2c/i2c-7/7-006a/hiz
+
+	chmod 0775 sys/devices/platform/mtk_ctd/typec_cc_orientation
+	chown root root sys/devices/platform/mtk_ctd/typec_cc_orientation
+
+
+	chmod 0775 sys/devices/platform/11016000.i2c/i2c-5/5-0055/read_pdate
+	chown root root sys/devices/platform/11016000.i2c/i2c-5/5-0055/read_pdate
+	chmod 0775 sys/devices/platform/11016000.i2c/i2c-5/5-0055/read_sdate
+	chown root root sys/devices/platform/11016000.i2c/i2c-5/5-0055/read_sdate
+	chmod 0775 sys/devices/platform/11016000.i2c/i2c-5/5-0055/write_sdate
+	chown root root sys/devices/platform/11016000.i2c/i2c-5/5-0055/write_sdate
+	chmod 0775 sys/devices/platform/11016000.i2c/i2c-5/5-0055/soh
+	chown root root sys/devices/platform/11016000.i2c/i2c-5/5-0055/soh
+	chmod 0775 sys/devices/platform/11016000.i2c/i2c-5/5-0055/battery_cv
+	chown root root sys/devices/platform/11016000.i2c/i2c-5/5-0055/battery_cv
+	chmod 0775 sys/devices/platform/11016000.i2c/i2c-5/5-0055/battery_maintenance
+	chown root root sys/devices/platform/11016000.i2c/i2c-5/5-0055/battery_maintenance
+	chmod 0775 sys/devices/platform/11016000.i2c/i2c-5/5-0055/battery_maintenance20
+	chown root root sys/devices/platform/11016000.i2c/i2c-5/5-0055/battery_maintenance20
+
+on property:sys.set_activate_data=1
+    write /sys/devices/platform/11016000.i2c/i2c-5/5-0055/activate_date 0xFFFFFF
 
 on property:vold.decrypt=trigger_reset_main
     write /proc/bootprof "INIT:vold.decrypt=trigger_reset_main"
@@ -970,6 +983,7 @@ on property:persist.vendor.mediatek.fg.force25c=0
 on property:persist.vendor.mediatek.fg.log.enable=1
     write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
     write /sys/bus/platform/devices/battery/FG_daemon_log_level 7
+    write /sys/devices/platform/1000d000.pwrap/1000d000.pwrap:mt6358-pmic/mt6358-gauge/FG_daemon_log_level 7
     write /proc/sys/kernel/printk 8
 
 
@@ -983,7 +997,6 @@ service meta_tst /vendor/bin/meta_tst
     disabled
     oneshot
 
-
 service factory_no_image /vendor/bin/factory
     user root
     group radio system wifi media gps audio bluetooth wakelock nfc
@@ -991,34 +1004,7 @@ service factory_no_image /vendor/bin/factory
     socket factory-atci stream 660 radio system
     disabled
     oneshot
-
-#Barley code for OBARLEY-733 by bianminghui at 20230705 start
-#WiFi Sar 7
-on property:vendor.sysctl.tx=7
-    exec - root -- /system/bin/iwpriv wlan0 driver "SET_PWR_CTRL MySar 7"
-#WiFi Sar 6
-on property:vendor.sysctl.tx=6
-    exec - root -- /system/bin/iwpriv wlan0 driver "SET_PWR_CTRL MySar 6"
-#WiFi Sar 5
-on property:vendor.sysctl.tx=5
-    exec - root -- /system/bin/iwpriv wlan0 driver "SET_PWR_CTRL MySar 5"
-#WiFi Sar 4
-on property:vendor.sysctl.tx=4
-    exec - root -- /system/bin/iwpriv wlan0 driver "SET_PWR_CTRL MySar 4"
-#WiFi Sar 3
-on property:vendor.sysctl.tx=3
-    exec - root -- /system/bin/iwpriv wlan0 driver "SET_PWR_CTRL MySar 3"
-#WiFi Sar 2
-on property:vendor.sysctl.tx=2
-    exec - root -- /system/bin/iwpriv wlan0 driver "SET_PWR_CTRL MySar 2"
-#WiFi Sar 1
-on property:vendor.sysctl.tx=1
-    exec - root -- /system/bin/iwpriv wlan0 driver "SET_PWR_CTRL MySar 1"
-#WiFi Sar 0
-on property:vendor.sysctl.tx=0
-    exec - root -- /system/bin/iwpriv wlan0 driver "SET_PWR_CTRL MySar 0"
-#Barley code for OBARLEY-733 by bianminghui at 20230705 end
-
+	
 # start meta_tst for ATM
 on property:sys.boot_completed=1 && property:ro.boot.atm=enable
     start meta_tst
@@ -1043,49 +1029,19 @@ service osi /system/bin/osi
     oneshot
     #seclabel u:r:osi:s0
 
-# Barley code for BarleyV-1381 by liaocy2 at 2025/01/03 start
-on boot
-     chmod 0644 /vendor/bin/nvram_country
-     start nvram_country
-service nvram_country /vendor/bin/nvram_country
-     user root
-     group root
-     oneshot
-     disabled
+
+on property:ro.boot.usbdebugflag=1
+    setprop persist.sys.lgsi.adbdebug "true"
+    setprop persist.vendor.lgsi.adbdebug "true"
+    setprop persist.sys.usb.config adb
 
 
-#fingerprint
-# SpruceV code for OSPURCEV-1679 by gaojie22 at 20241226 start
-on property:ro.boot.fingerprint=*
-    setprop ro.build.fingerprint ${ro.boot.fingerprint}
-    setprop ro.vendor.build.fingerprint ${ro.boot.fingerprint}
-    setprop ro.odm.build.fingerprint ${ro.boot.fingerprint}
-    setprop ro.product.build.fingerprint ${ro.boot.fingerprint}
-    setprop ro.system.build.fingerprint ${ro.boot.fingerprint}
-    setprop ro.system_ext.build.fingerprint ${ro.boot.fingerprint}
-    setprop ro.vendor_dlkm.build.fingerprint ${ro.boot.fingerprint}
-    setprop ro.bootimage.build.fingerprint ${ro.boot.fingerprint}
-# SpruceV code for OSPURCEV-1679 by gaojie22 at 20241226 end
-
-# CloveV code for CLOVEV-4953 by xiongsb2 at 2025/06/18 start
- service setsarcal /system/vendor/bin/setsarcal.sh
-     disabled
-     user root
-     oneshot
-     group root system
-     seclabel u:r:meta_tst:s0
-# CloveV code for CLOVEV-4953 by xiongsb2 at 2025/06/18 end
-
-# CloveV code for CLOVEV-500 by lizm27 at 20250307 start
-on property:vendor.service.nvram_init=Ready
-    chmod 0644 /vendor/bin/nvram_lenovo
-    start nvram_lenovo
-
-service nvram_lenovo /vendor/bin/nvram_lenovo
-    user root
-    group root
-    oneshot
-    disabled
-#CloveV code for CLOVEV-500 by lizm27 at 20250307 end
-
-
+    
+on property:sys.boot_completed=1 && property:ro.boot.erase.lenovocust=true
+    umount /lenovocust
+    exec /bin/mkfs.ext4 -N 76800 -I 128 -b 1024 /dev/block/platform/11230000.mmc/by-name/lenovocust
+    mount ext4 /dev/block/platform/11230000.mmc/by-name/lenovocust /lenovocust noatime nosuid nodev barrier=1
+    restorecon_recursive /lenovocust
+    chown system system /lenovocust
+    chmod 0777 /lenovocust
+    restorecon_recursive /lenovocust

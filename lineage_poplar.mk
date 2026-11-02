@@ -5,7 +5,7 @@
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
 # Generic ramdisk (first-stage init, snapuserd) goes into boot.img.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
@@ -21,8 +21,8 @@ PRODUCT_PACKAGES += \
 # Inherit from poplar device
 $(call inherit-product, device/lenovo/poplar/device.mk)
 
-# Inherit some common Lineage stuff — Wi-Fi-only tablet
-$(call inherit-product, vendor/lineage/config/common_full_tablet_wifionly.mk)
+# Inherit some common Lineage stuff (LTE tablet: telephony, no Wi-Fi-only config)
+$(call inherit-product, vendor/lineage/config/common_full_tablet.mk)
 
 PRODUCT_DEVICE := poplar
 PRODUCT_NAME := lineage_poplar

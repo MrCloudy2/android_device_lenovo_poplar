@@ -40,33 +40,6 @@ on post-fs-data
     chmod 0660 /dev/spm
     chown system system /dev/spm
 
-#Barley code for OBARLEY-512 by baiyx7 at 20230626 start
-#Sar Calibration
-    chown system system /sys/devices/virtual/sensor/m_situ_misc/testcali
-    chmod 0660 /sys/devices/virtual/sensor/m_situ_misc/testcali
-#Barley code for OBARLEY-512 by baiyx7 at 20230626 end
-
-#  Clove code for Clove-631 by liugong2 at 2024.09.12 start
-    mkdir /mnt/vendor/persist 0664 system system
-    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw wait
-    chown system system /mnt/vendor/persist
-    chmod 0771 /mnt/vendor/persist
-    restorecon_recursive /mnt/vendor/persist
-    mkdir /mnt/vendor/persist/mtk_battery_cmd 0771 root system
-    chown root system /mnt/vendor/persist/mtk_battery_cmd/battery_maintenance
-    chmod 0755 /mnt/vendor/persist/mtk_battery_cmd/battery_maintenance
-
-on property:persist.vendor.battery.battery_maintenance.enabled=0
-    write /sys/class/power_supply/charger/bm_enable 0
-    write /mnt/vendor/persist/mtk_battery_cmd/battery_maintenance 0
-#  Clove code for Clove-631 by liugong2 at 2024.09.12 end
-
-#  Clove code for Clove-1241 by xuyc13 at 2024.09.25 start
-on property:persist.vendor.battery.battery_maintenance.enabled=1 && property:persist.sys.battery_healthy_flag=*
-    write /mnt/vendor/persist/mtk_battery_cmd/battery_maintenance ${persist.sys.battery_healthy_flag}
-    write /sys/class/power_supply/charger/bm_enable ${persist.sys.battery_healthy_flag}
-#  Clove code for Clove-1241 by xuyc13 at 2024.09.25 end
-
 on init
     # Refer to http://source.android.com/devices/tech/storage/index.html
     # It said, "Starting in Android 4.4, multiple external storage devices are surfaced to developers through
@@ -88,3 +61,17 @@ on property:sys.boot_completed=1
     write /sys/kernel/tracing/instances/mmstat/buffer_size_kb 16
     write /sys/kernel/tracing/instances/mmstat/events/mmstat/enable 1
     write /sys/kernel/tracing/instances/mmstat/tracing_on 1
+
+# start service for factory
+#on property:sys.boot_completed=1
+on property:sys.boot_completed=1
+    start prop_init    
+
+# set fingerprint
+	setprop ro.build.fingerprint ${ro.boot.fingerprint}
+	setprop ro.vendor.build.fingerprint ${ro.boot.fingerprint}
+	setprop ro.system.build.fingerprint ${ro.boot.fingerprint}
+	setprop ro.system_ext.build.fingerprint ${ro.boot.fingerprint}
+	setprop ro.product.build.fingerprint ${ro.boot.fingerprint}
+	setprop ro.odm.build.fingerprint ${ro.boot.fingerprint}
+	setprop ro.bootimage.build.fingerprint ${ro.boot.fingerprint}

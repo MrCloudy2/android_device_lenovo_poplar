@@ -107,7 +107,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(foreach f,init.aee.rc init.ago.rc init.cgroup.rc init.connectivity.common.rc \
         init.connectivity.rc init_connectivity.rc init.mt6768.usb.rc init.mt8786.rc \
-        init.mtkgki.rc init.project.rc init.sensor_1_0.rc,\
+        init.modem.rc init.mtkgki.rc init.project.rc init.sensor_1_0.rc,\
         $(LOCAL_PATH)/rootdir/etc/$(f):$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/$(f))
 
 # -- Permissions / hardware features ---------------------------------------------

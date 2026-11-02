@@ -125,9 +125,16 @@ BOARD_FLASH_BLOCK_SIZE := 262144
 # Filesystems — stock uses EROFS for read-only logical partitions, F2FS userdata
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
-BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := erofs
+# system, system_ext and product are ext4 with reserved space instead, so
+# MindTheGapps can be installed on top from recovery (EROFS has no free space
+# and cannot be written). The stock fstab already lists an ext4 variant for
+# each of them.
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 268435456
+BOARD_SYSTEM_EXTIMAGE_PARTITION_RESERVED_SIZE := 268435456
+BOARD_PRODUCTIMAGE_PARTITION_RESERVED_SIZE := 1610612736
 BOARD_EROFS_COMPRESSOR := lz4hc,9
 BOARD_EROFS_PCLUSTER_SIZE := 65536
 

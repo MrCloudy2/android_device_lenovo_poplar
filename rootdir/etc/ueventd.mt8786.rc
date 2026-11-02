@@ -22,7 +22,7 @@
 /dev/block/by-name/modem_b   0640    root    system
 /dev/block/by-name/md1dsp    0660    root    system
 /dev/block/by-name/boot_para 0640    root    system
-/dev/block/by-name/lenovoraw 0600    system  system
+/dev/block/by-name/lenovoraw 0640    system  system
 
 # OTP
 /dev/otp                  0660   system     system

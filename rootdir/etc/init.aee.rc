@@ -24,9 +24,17 @@ on init
 
 on property:sys.boot_completed=1
     setprop persist.vendor.aeev.log.status 1
+    setprop persist.vendor.aeev.fatal.underrun.dbnumber 0
+    setprop persist.vendor.aeev.fatal.underrun.lasttime 0
 
 on property:persist.vendor.aeev.boot.reason.status=done && property:ro.vendor.aee.convert64=0
     start aeev_set_last_shutdown
 
 on property:persist.vendor.aeev.boot.reason.status=done && property:ro.vendor.aee.convert64=1
     start aeev_set_last_shutdown_v2
+
+on property:persist.vendor.aeev.fatal.underrun=enable
+    write /sys/bus/platform/drivers/emiisu_drv/emiisu_ctrl 0xdec5dec5
+
+on property:persist.vendor.aeev.fatal.underrun=disable
+    write /sys/bus/platform/drivers/emiisu_drv/emiisu_ctrl 0xdecadeca
