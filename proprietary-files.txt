@@ -1118,6 +1118,7 @@ vendor/lib64/android.hardware.audio.core-impl-mediatek.so
 vendor/lib64/android.hardware.bluetooth.audio-impl-mediatek.so
 vendor/lib64/android.hardware.light@2.0.so
 vendor/lib64/android.hardware.power-service-mediatek.so:vendor/lib64/android.hardware.power-service-mediatek_vendor.so;FIX_SONAME
+vendor/lib64/android.system.suspend@1.0.so
 vendor/lib64/arm.graphics-V5-ndk.so
 vendor/lib64/arm.mali.platform-V2-ndk.so
 vendor/lib64/egl/libGLES_mali.so
