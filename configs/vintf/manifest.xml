@@ -1,8 +1,11 @@
 <!--
     Device VINTF manifest for poplar: the stock TB311XU base manifest
-    (/vendor/etc/vintf/manifest.xml, firmware 37.350.260708W), unchanged.
+    (/vendor/etc/vintf/manifest.xml, firmware 37.350.260708W), without the
+    <sepolicy> version: assemble_vintf fills in BOARD_SEPOLICY_VERS.
     HALs with their own fragment live in /vendor/etc/vintf/manifest/.
-    target-level is 6 (FCM 6), as on stock; the vendor blobs are frozen at it.
+    Stock declares target-level 6, but Android 17 has no FCM 6 matrix any more, so
+    this uses 7, the lowest it supports. At level 7 the kernel level may not be
+    set; libvintf derives it from the kernel version (6.6: 202404).
 -->
 <!--
     Input:
@@ -27,7 +30,7 @@
         device/mediatek/vendor/common/manifest.xml
         device/mediatek/vendor/common/manifest_target_level_s.xml
 -->
-<manifest version="8.0" type="device" target-level="6">
+<manifest version="8.0" type="device" target-level="7">
     <hal format="aidl">
         <name>android.hardware.camera.provider</name>
         <version>3</version>
@@ -208,8 +211,4 @@
         <version>7</version>
         <fqname>IPictureQuality_AIDL/default</fqname>
     </hal>
-    <sepolicy>
-        <version>202404</version>
-    </sepolicy>
-    <kernel target-level="6"/>
 </manifest>
