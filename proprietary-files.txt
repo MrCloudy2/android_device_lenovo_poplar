@@ -1342,6 +1342,7 @@ vendor/lib64/libminiui.so
 vendor/lib64/libmipc.so
 vendor/lib64/libmmprofile.so
 vendor/lib64/libmnetlink_v104.so
+vendor/lib64/libmnl.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libmp4enc_sa.ca7.so
 vendor/lib64/libmsbc_mtk.so
 vendor/lib64/libmsnr.so
