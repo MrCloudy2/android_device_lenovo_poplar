@@ -47,7 +47,20 @@ Check them with `sha256sum -c SHA256SUMS`.
      wipes itself.
    - Without `sn.img`, `fastboot oem unlock` fails with `Sn Image Auth fail`.
    - After the unlock, boot stock once and let any pending system update finish.
-2. **Flash the boot images** from the bootloader (`adb reboot bootloader`).
+2. **Give the other slot the same firmware.**
+   - The LineageOS package doesn't contain firmware (lk, tee, modem, ...). It installs to the
+     *other* slot, and after a stock OTA that slot may still hold older firmware.
+   - Recovery adb is locked on these secure builds, so the copy is done with fastboot. Lenovo
+     Software Fix (Rescue and Smart Assistant) downloads the full stock firmware package for
+     `37.350.260708W` to the PC.
+   - From the bootloader, flash these images from that package to the *inactive* slot (`a` if
+     `fastboot getvar current-slot` says `b`):
+     ```
+     for p in gz lk md1img scp spmfw sspm tee; do fastboot flash ${p}_a $p.img; done
+     ```
+   - Skip this step if both slots already run the same stock build, for example after a full
+     Software Fix flash.
+3. **Flash the boot images** from the bootloader (`adb reboot bootloader`).
    - Use the slot that is active now (`fastboot getvar current-slot`). This example uses `b`:
      ```
      fastboot flash vbmeta_b vbmeta.img
@@ -62,16 +75,6 @@ Check them with `sha256sum -c SHA256SUMS`.
      ```
    - `md_udc` is `/metadata`. Erasing it is required when coming from stock.
    - The tablet now boots into Lineage recovery.
-3. **Copy the firmware to the other slot.**
-   - The LineageOS package doesn't contain firmware (lk, tee, modem, ...). It installs to the
-     *other* slot, which after a stock OTA may hold older firmware.
-   - In recovery, open *Advanced → Enable ADB*.
-   - On the PC, with `b` as the active slot:
-     ```
-     adb shell 'for p in gz lk md1img scp spmfw sspm tee; do
-       dd if=/dev/block/by-name/${p}_b of=/dev/block/by-name/${p}_a bs=1M && echo $p ok; done; sync'
-     ```
-   - If `a` is active, swap `_a` and `_b`.
 4. **Install LineageOS.**
    - **Factory reset → Format data/factory reset.** This is required when coming from stock or
      from a build signed with different keys.
