@@ -44,7 +44,6 @@ lib_fixups: lib_fixups_user_type = {
         'libarmnn',
         'libformatter',
         'libion_mtk',
-        'libmnl',
         'libmtkperf_client_vendor',
         'libperfctl_vendor',
         'libpowerhalwrap_vendor',
@@ -97,8 +96,10 @@ blob_fixups: blob_fixups_user_type = {
     ): blob_fixup()
         .add_needed('libaudioutils_shim.so')
         .replace_needed('libaudio_aidl_conversion_common_ndk.so', 'libaudio_aidl_conversion_common_ndk_prebuilt.so'),
+    'vendor/bin/mnld': blob_fixup()
+        .replace_needed('android.hardware.sensors-V2-ndk.so', 'android.hardware.sensors-V3-ndk.so')
+        .replace_needed('libmnl.so', 'libmnl_mtk.so'),
     (
-        'vendor/bin/mnld',
         'vendor/lib/libaalservice.so',
         'vendor/lib64/libaalservice.so',
         'vendor/lib64/libcam.utils.sensorprovider.so',
