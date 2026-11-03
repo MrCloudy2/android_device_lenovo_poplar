@@ -15,6 +15,31 @@ import argparse, os, re, sys
 from collections import OrderedDict
 
 # Stock domain -> domain LineageOS uses for the same binary (clove did the same).
+# Stock rules that violate Android 17 neverallows: (regex, replacement or None to drop).
+NEVERALLOW_FIXUPS = [
+    # app_neverallows: sepolicy_vndr declares gpuserv protected_service, so untrusted
+    # apps may not find it; drop stock's "app-safe" tag
+    (r'^typeattribute mtk_hal_gpuserv_service mtk_safe_service_manager_type;$', None),
+    # native_app_zygote (private, unnameable here) may only find an allowlist of
+    # services: split stock's "every domain" grant into vendor domains, apps and
+    # the core graphics users
+    (r'^allow \{ domain -isolated_app_all .* \} (mtk_hal_mali_platform_default_service:service_manager \{ find \};)$',
+     r'allow { domain -coredomain -hal_configstore_server -vendor_init } \1\n'
+     r'allow { appdomain -isolated_app_all } \1\n'
+     r'allow { surfaceflinger system_server cameraserver mediaserver bootanim mediaswcodec } \1'),
+    # system_server may not load kernel modules
+    (r'^allow system_server self:capability \{ sys_module \};$', None),
+    # sepolicy_vndr mtk_hal_netdagent.te neverallow
+    (r'^allow mtk_hal_power mtk_hal_netdagent_service:service_manager', None),
+    # domain.te: binder/fd only between processes; service labels are not domains
+    (r'^allow (appdomain mtk_safe_service_manager_type:(binder|fd)|mtk_safe_service_manager_type appdomain:binder) ', None),
+    # sepolicy_test: isolated (sandboxed) apps get no extra grants
+    (r'^allow isolated_compute_app ', None),
+    # domain.te: ioctl on non-device files needs an xperm allowlist
+    (r'^(allow (?:smartplatformserver sysfs_mmcblk|vendor_lenovo_battery_default persist_vendor_file):(?:dir|file) \{) ioctl ',
+     r'\1 '),
+]
+
 MERGE = {
     'mtk_hal_audio': 'hal_audio_default',
     'mtk_hal_audio_exec': 'hal_audio_default_exec',
@@ -47,15 +72,18 @@ def collect_declared(dirs):
                 if not (f.endswith('.te') or f in ('attributes', 'global_macros', 'te_macros')):
                     continue
                 s = strip_m4_comments(open(os.path.join(root, f), errors='replace').read())
-                for m in re.finditer(r'^\s*(type|attribute)\s+([A-Za-z0-9_]+)', s, re.M):
+                for m in re.finditer(r'^\s*(type|attribute)\s+([A-Za-z0-9_.-]+)', s, re.M):
                     declared.add(m.group(2))
                 for m in re.finditer(r'^\s*typealias\s+\S+\s+alias\s+(\{[^}]*\}|\S+)', s, re.M):
-                    declared.update(re.findall(r'[A-Za-z0-9_]+', m.group(1)))
-                for m in re.finditer(r'\bhal_attribute\(\s*([A-Za-z0-9_]+)\s*\)', s):
+                    declared.update(re.findall(r'[A-Za-z0-9_.-]+', m.group(1)))
+                for m in re.finditer(r'\bhal_attribute\(\s*([A-Za-z0-9_.-]+)\s*\)', s):
                     n = m.group(1)
                     declared.update({'hal_' + n, 'hal_%s_client' % n, 'hal_%s_server' % n})
+                # app_domain()/userfaultfd_use() declare <domain>_userfaultfd
+                for m in re.finditer(r'\b(?:app_domain|userfaultfd_use)\(\s*([A-Za-z0-9_.-]+)\s*\)', s):
+                    declared.add(m.group(1) + '_userfaultfd')
                 for mac in PROP_MACROS:
-                    for m in re.finditer(r'\b%s\(\s*([A-Za-z0-9_]+)\s*\)' % mac, s):
+                    for m in re.finditer(r'\b%s\(\s*([A-Za-z0-9_.-]+)\s*\)' % mac, s):
                         declared.add(m.group(1))
     return declared
 
@@ -197,6 +225,8 @@ class Porter:
             elif k == 'typetransition':
                 if len(e) == 6:
                     s, t, c, nm, r = e[1:]
+                    if self.n(r).endswith('_userfaultfd') and self.n(r) in self.declared:
+                        continue  # macro elsewhere (userfaultfd_use) already has it
                     rules.append('type_transition %s %s:%s %s %s;' % (self.n(s), self.n(t), c, self.n(r), nm))
                 else:
                     s, t, c, r = e[1:]
@@ -249,12 +279,58 @@ def port_contexts(stock, vndr_files, declared_types, keyfn):
     return out
 
 
+def drop_private(lines, priv):
+    """Remove private names from te statements; drop a statement when a
+    source/target/type position would be left empty."""
+    tok = re.compile(r'(?<![\w.-])(-?)([A-Za-z0-9_.-]+)(?![\w.-])')
+    out, trimmed, dropped = [], 0, 0
+    for l in lines:
+        if l == '#SPLIT' or not any(n in priv for n in re.findall(r'[A-Za-z0-9_.-]+', l)):
+            out.append(l)
+            continue
+        head, _, tail = l.partition(':') if not l.startswith(('typeattribute', 'typealias')) else (l, '', '')
+        words = head.split(None, 1)
+        kw, body = words[0], words[1] if len(words) > 1 else ''
+        if kw in ('typeattribute', 'typealias', 'type_transition') or not tail:
+            dropped += 1
+            continue
+        # body = "SRC TGT" where each is a name or a { } / ~{ } set
+        parts = re.findall(r'~?\{[^}]*\}|\S+', body)
+        newparts = []
+        for part in parts:
+            if part.lstrip('~').startswith('{'):
+                inner = [w for w in part.lstrip('~').strip('{} ').split() if w.lstrip('-') not in priv]
+                if not [w for w in inner if not w.startswith('-')]:
+                    newparts = None
+                    break
+                newparts.append(('~' if part.startswith('~') else '') + '{ %s }' % ' '.join(inner))
+            elif part in priv:
+                newparts = None
+                break
+            else:
+                newparts.append(part)
+        # perms/class side (tail) never holds type names except in type_transition
+        if newparts is None or len(newparts) != len(parts):
+            dropped += 1
+            continue
+        trimmed += 1
+        out.append('%s %s:%s' % (kw, ' '.join(newparts), tail))
+    return out, trimmed, dropped
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('stock')
     ap.add_argument('out')
     ap.add_argument('--decl', action='append', default=[], help='policy dirs whose declarations to skip')
     ap.add_argument('--vndr', required=True, help='sepolicy_vndr checkout (contexts dedup)')
+    ap.add_argument('--private', action='append', default=[],
+                    help='platform/system_ext private policy dirs: names declared only there are '
+                         'invisible to vendor policy, so rules using them are trimmed')
+    ap.add_argument('--genfs-cil', action='append', default=[],
+                    help='platform compat genfs CIL (plat_sepolicy_genfs_<level>.cil) to dedup against')
+    ap.add_argument('--base-conf', help='m4-expanded vendor policy without this port: '
+                    'type_transitions it already has are dropped')
     a = ap.parse_args()
 
     ver = open(os.path.join(a.stock, 'plat_sepolicy_vers.txt')).read().strip()
@@ -262,6 +338,34 @@ def main():
     declared = collect_declared(a.decl + [a.vndr])
     p = Porter(ver, declared)
     decls, attrs, ta, rules, skipped = p.port(cil)
+    priv = collect_declared(a.private) - collect_declared(a.decl)
+    # Stock platform (system-side, versioned) domains LineageOS does not have, e.g.
+    # Lenovo's smartplatformserver: rules for them are dead, and declaring them
+    # here would give vendor policy a non-domain type used with binder.
+    m = re.search(r'^\(typeattributeset domain \(([^)]*)\)', cil, re.M)
+    plat_domains = {x[:-len(ver) - 1] for x in m.group(1).split() if x.endswith('_' + ver)} if m else set()
+    dead = plat_domains - collect_declared(a.decl + a.private)
+    sys.stderr.write('dead platform domains: %s\n' % ' '.join(sorted(dead)))
+    priv |= dead
+    for pat, rep in NEVERALLOW_FIXUPS:
+        hit = [l for l in ta + rules if re.search(pat, l)]
+        if not hit:
+            sys.stderr.write('warning: neverallow fixup matched nothing: %s\n' % pat)
+        if rep is None:
+            ta = [l for l in ta if not re.search(pat, l)]
+            rules = [l for l in rules if not re.search(pat, l)]
+        else:
+            ta = [re.sub(pat, rep, l) for l in ta]
+            rules = [re.sub(pat, rep, l) for l in rules]
+    ta, trimmed, dropped = drop_private(ta + ['#SPLIT'] + rules, priv)
+    i = ta.index('#SPLIT'); ta, rules = ta[:i], ta[i + 1:]
+    if a.base_conf:
+        key = lambda l: re.sub(r'\s+', ' ', re.sub(r'^type_transition (\S+ \S+:\S+) \S+', r'\1', l.strip()))
+        base = {key(l) for l in open(a.base_conf, errors='replace') if l.lstrip().startswith('type_transition ')}
+        n0 = len(rules)
+        rules = [r for r in rules if not (r.startswith('type_transition ') and key(r) in base)]
+        sys.stderr.write('type_transitions already in base: %d\n' % (n0 - len(rules)))
+    sys.stderr.write('private names: %d, rules trimmed %d, dropped %d\n' % (len(priv), trimmed, dropped))
     # MTK's system_ext public policy (in the stock plat_pub_versioned.cil,
     # unversioned names) is only partly in sepolicy_vndr: declare the rest here.
     pub = open(os.path.join(a.stock, 'plat_pub_versioned.cil')).read()
@@ -280,7 +384,9 @@ def main():
         for blk in (attrs, decls, ta, rules):
             f.write('\n'.join(blk) + '\n\n')
 
-    vd = lambda *x: [os.path.join(a.vndr, 'base', 'vendor', *x), os.path.join(a.vndr, 'debug', 'vendor', *x)]
+    # dedup contexts/genfs against every policy dir in the build, not just sepolicy_vndr
+    ctx_dirs = [os.path.join(a.vndr, 'base', 'vendor'), os.path.join(a.vndr, 'debug', 'vendor')] + a.decl + a.private
+    vd = lambda *x: [os.path.join(d, *x) for d in ctx_dirs]
     first = lambda l: l.split()[0]
     jobs = [
         ('vendor_file_contexts', 'file_contexts', first),
@@ -303,6 +409,8 @@ def main():
     for f in vd('genfs_contexts') + [os.path.join(a.vndr, 'base', 'private', 'genfs_contexts')]:
         if os.path.exists(f):
             have.update(gkey(l) for l in ctx_lines(f) if l.startswith('genfscon'))
+    for f in a.genfs_cil:
+        have.update(re.findall(r'^\(genfscon (\S+) "([^"]*)"', open(f).read(), re.M))
     genfs = [g for g in genfs if gkey(g) not in have]
     with open(os.path.join(a.out, 'genfs_contexts'), 'w') as f:
         f.write('# Stock TB311XU genfscon entries not provided by sepolicy_vndr (generated)\n')

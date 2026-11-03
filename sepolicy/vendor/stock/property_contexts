@@ -14,8 +14,6 @@ persist.vendor.radio.nitz_oper_key            u:object_r:vendor_mtk_telephony_se
 vendor.debug.sf.dynamic_duration. u:object_r:vendor_mtk_debug_sf_duration_prop:s0
 ro.vendor.mtk_hwc_dsi_switch u:object_r:vendor_mtk_hwc_dsi_switch_prop:s0
 persist.vendor.hwcomposer.boot_display_config. u:object_r:vendor_mtk_hwc_boot_display_config_prop:s0
-persist.vendor.pco5.radio.ctrl u:object_r:vendor_mtk_radio_prop:s0
-vendor.powerhal.         u:object_r:vendor_mtk_powerhal_prop:s0
 vendor.applist.          u:object_r:vendor_mtk_applist_prop:s0
 vendor.mtk.hwc. u:object_r:vendor_mtk_hwc_prop:s0
 vendor.bluetooth.lhdc_codec.supported u:object_r:vendor_mtk_default_prop:s0

@@ -11,7 +11,6 @@ genfscon debugfs "/printk/index" u:object_r:debugfs_printk_index:s0
 genfscon debugfs "/mme/buffer" u:object_r:debugfs_fb:s0
 genfscon debugfs "/tracer/etb" u:object_r:debugfs_tracer_etb:s0
 genfscon debugfs "/extfrag" u:object_r:debugfs_extfrag:s0
-genfscon iso9660 "/" u:object_r:iso9660:s0
 genfscon proc "/gpufreqv2/stack_working_opp_table" u:object_r:proc_gpufreqv2_stack_working_opp_table:s0
 genfscon proc "/cpu_loading/core_cpus_overThrhld" u:object_r:proc_cpu_loading:s0
 genfscon proc "/gpufreqv2/gpu_working_opp_table" u:object_r:proc_gpufreqv2_gpu_working_opp_table:s0
@@ -464,7 +463,6 @@ genfscon sysfs "/devices/platform/14800000.dp-tx/extcon" u:object_r:sysfs_extcon
 genfscon sysfs "/class/power_supply/battery/voltage_now" u:object_r:sysfs_batteryinfo:s0
 genfscon sysfs "/class/power_supply/battery/current_now" u:object_r:sysfs_batteryinfo:s0
 genfscon sysfs "/class/power_supply/battery/cycle_count" u:object_r:sysfs_batteryinfo:s0
-genfscon sysfs "/devices/virtual/timed_output/vibrator" u:object_r:sysfs_vibrator:s0
 genfscon sysfs "/devices/platform/trusty/wakeup/wakeup" u:object_r:sysfs_wakeup:s0
 genfscon sysfs "/module/firmware_class/parameters/path" u:object_r:sysfs_gpu_fwpath:s0
 genfscon sysfs "/devices/platform/soc/soc:aov@0/wakeup" u:object_r:sysfs_wakeup:s0
@@ -507,5 +505,4 @@ genfscon sysfs "/class/edpswitch" u:object_r:sysfs_edpswitch:s0
 genfscon sysfs "/module/mtk_game" u:object_r:sysfs_mtk_game:s0
 genfscon sysfs "/module/pgboost" u:object_r:sysfs_pgboost:s0
 genfscon sysfs "/class/dpswitch" u:object_r:sysfs_dpswitch:s0
-genfscon sysfs "/class/typec" u:object_r:sysfs_usb_nonplat:s0
 genfscon sysfs "/kernel/game" u:object_r:sysfs_game:s0
