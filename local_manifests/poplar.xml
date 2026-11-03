@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Lenovo Tab TB311XU (poplar), LineageOS 24.0 -->
+<manifest>
+  <remote name="mrcloudy2" fetch="https://github.com/MrCloudy2" />
+  <remote name="techyminati" fetch="https://github.com/techyminati" />
+
+  <project path="device/lenovo/poplar" name="android_device_lenovo_poplar" remote="mrcloudy2" revision="lineage-24.0" />
+  <project path="device/lenovo/poplar-kernel" name="android_device_lenovo_poplar-kernel" remote="mrcloudy2" revision="lineage-24.0" clone-depth="1" />
+  <project path="vendor/lenovo/poplar" name="android_vendor_lenovo_poplar" remote="mrcloudy2" revision="lineage-24.0" clone-depth="1" />
+
+  <project path="device/mediatek/sepolicy_vndr" name="LineageOS/android_device_mediatek_sepolicy_vndr" remote="github" revision="lineage-24.0" />
+  <project path="hardware/mediatek" name="LineageOS/android_hardware_mediatek" remote="github" revision="lineage-24.0" />
+  <!-- MediaTek IMS (VoLTE / VoWiFi), tested at this commit -->
+  <project path="vendor/mediatek/ims" name="android_vendor_mediatek_ims" remote="techyminati" revision="e9cab87f806ab010346dd61cab3dc4fd6051aa59" upstream="android-16-qpr2" />
+</manifest>
