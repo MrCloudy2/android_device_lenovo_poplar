@@ -88,6 +88,11 @@ Check them with `sha256sum -c SHA256SUMS`.
    - "Signature verification failed" is expected: choose *Install anyway*.
 6. **Reboot system now.** The first boot takes a few minutes.
 
+**Lenovo game downloads after setup.** The build keeps the stock Lenovo fingerprint, so Play applies
+Lenovo's *Play Auto Installs* list: when you first open Play, it starts downloading promoted games.
+To stop it, cancel the downloads and remove the config package (USB debugging on):
+`adb shell pm uninstall android.autoinstalls.config.Lenovo.tablet`.
+
 If you signed in to a Google account on stock, Factory Reset Protection asks for that account
 after the format. Remove the account in stock Settings before you start.
 
