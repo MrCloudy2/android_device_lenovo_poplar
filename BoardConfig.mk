@@ -73,6 +73,14 @@ BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
 BOARD_RAMDISK_USE_LZ4 := true
 
+# Launched with init_boot (Android 13+ GKI): as on stock, boot.img is kernel
+# only and the generic ramdisk lives in init_boot.img (stock: header v4,
+# 8 MiB partition). Without this the ramdisk lands in boot.img while the
+# bootloader keeps loading the stock init_boot ramdisk.
+BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608
+BOARD_INIT_BOOT_HEADER_VERSION := 4
+BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
+
 # A/B with Virtual A/B snapshots (matches stock)
 AB_OTA_UPDATER := true
 BOARD_USES_RECOVERY_AS_BOOT :=
@@ -85,6 +93,7 @@ BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 # both slots must already carry the same stock firmware (see README).
 AB_OTA_PARTITIONS += \
     boot \
+    init_boot \
     vendor_boot \
     dtbo \
     vbmeta \
